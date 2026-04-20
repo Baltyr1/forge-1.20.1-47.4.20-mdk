@@ -1,3 +1,6 @@
 {
-  "item.opmmod.yen": "Yen"
+  "item.opmmod.yen": "Yen",
+  "item.opmmod.tiger_class_essence": "Tiger_Class_Essence",
+
+  "creativetab.opm_tab" : "OPM ITEMS"
 }

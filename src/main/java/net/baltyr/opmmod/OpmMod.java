@@ -1,6 +1,7 @@
 package net.baltyr.opmmod;
 
 import com.mojang.logging.LogUtils;
+import net.baltyr.opmmod.item.ModCreativeModTabs;
 import net.baltyr.opmmod.item.ModItems;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -29,6 +30,8 @@ public class OpmMod
     {
         IEventBus modEventBus = context.getModEventBus();
 
+        ModCreativeModTabs.register(modEventBus);
+
         ModItems.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
@@ -49,6 +52,7 @@ public class OpmMod
     {
         if(event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
             event.accept(ModItems.YEN);
+            event.accept(ModItems.TIGER_CLASS_ESSENCE);
         }
     }
 

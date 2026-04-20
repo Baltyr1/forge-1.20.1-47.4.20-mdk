@@ -12,6 +12,7 @@ public class ModItems {
             DeferredRegister.create(ForgeRegistries.ITEMS, OpmMod.MOD_ID);
 
     public static final RegistryObject<Item> YEN = ITEMS.register("yen", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> TIGER_CLASS_ESSENCE = ITEMS.register("tiger_class_essence", () -> new Item(new Item.Properties()));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
