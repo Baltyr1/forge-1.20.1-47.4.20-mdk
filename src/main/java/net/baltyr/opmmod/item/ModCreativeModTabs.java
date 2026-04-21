@@ -28,6 +28,7 @@ public class ModCreativeModTabs {
                         pOutput.accept(ModItems.NICHIRIN_SWORD.get());
 
                         pOutput.accept(ModBlocks.ORICHALQUE_BLOCK.get());
+                        pOutput.accept(ModBlocks.RAW_ORICHALQUE_BLOCK.get());
                     })
                     .build());
 

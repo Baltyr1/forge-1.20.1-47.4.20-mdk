@@ -21,6 +21,9 @@ public class ModBlocks {
     public static final RegistryObject<Block> ORICHALQUE_BLOCK = registerBlock( "orichalque_block",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.NETHERITE_BLOCK)));
 
+    public static final RegistryObject<Block> RAW_ORICHALQUE_BLOCK = registerBlock( "raw_orichalque_block",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.NETHERITE_BLOCK)));
+
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
         registerBlockItem(name, toReturn);

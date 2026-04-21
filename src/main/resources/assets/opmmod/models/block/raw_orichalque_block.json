@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "opmmod:block/raw_orichalque_block"
+  }
+}
