@@ -17,6 +17,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
     protected void registerStatesAndModels() {
         blockWithItem(ModBlocks.ORICHALCUM_BLOCK);
         blockWithItem(ModBlocks.RAW_ORICHALCUM_BLOCK);
+        blockWithItem(ModBlocks.ORICHALCUM_ORE);
+        blockWithItem(ModBlocks.DEEPSLATE_ORICHALCUM_ORE);
     }
 
     private void blockWithItem(RegistryObject<Block> blockRegistryObject) {
