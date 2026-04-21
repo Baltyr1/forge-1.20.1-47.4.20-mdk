@@ -19,6 +19,11 @@ public class ModItems {
     public static final RegistryObject<Item> TIGER_CLASS_ESSENCE = ITEMS.register("tiger_class_essence",
             () -> new Item(new Item.Properties()));
 
+    public static final RegistryObject<Item> ORICHALCUM = ITEMS.register("orichalcum",
+            () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> RAW_ORICHALCUM = ITEMS.register("raw_orichalcum",
+            () -> new Item(new Item.Properties()));
+
     public static final RegistryObject<Item> NICHIRIN_SWORD = ITEMS.register("nichirin_sword",
             () -> new SwordItem(Tiers.NETHERITE, 4, -2.4f, new Item.Properties()));
 

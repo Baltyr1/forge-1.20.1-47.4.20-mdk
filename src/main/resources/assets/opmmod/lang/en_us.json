@@ -2,9 +2,11 @@
   "item.opmmod.yen": "Yen",
   "item.opmmod.tiger_class_essence": "Tiger Class Essence",
   "item.opmmod.nichirin_sword": "Nichirin Sword",
+  "item.opmmod.orichalcum": "Orichalcum",
+  "item.opmmod.raw_orichalcum": "Raw Orichalcum",
 
-  "block.opmmod.orichalque_block": "Block of Orichalque",
-  "block.opmmod.raw_orichalque_block": "Block of Raw Orichalque",
+  "block.opmmod.orichalcum_block": "Block of Orichalcum",
+  "block.opmmod.raw_orichalcum_block": "Block of Raw Orichalcum",
 
 
   "creativetab.opm_tab" : "OPM ITEMS"

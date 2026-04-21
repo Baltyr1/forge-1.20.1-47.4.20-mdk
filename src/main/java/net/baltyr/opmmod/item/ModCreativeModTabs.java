@@ -26,9 +26,11 @@ public class ModCreativeModTabs {
                         pOutput.accept(ModItems.YEN.get());
                         pOutput.accept(ModItems.TIGER_CLASS_ESSENCE.get());
                         pOutput.accept(ModItems.NICHIRIN_SWORD.get());
+                        pOutput.accept(ModItems.ORICHALCUM.get());
+                        pOutput.accept(ModItems.RAW_ORICHALCUM.get());
 
-                        pOutput.accept(ModBlocks.ORICHALQUE_BLOCK.get());
-                        pOutput.accept(ModBlocks.RAW_ORICHALQUE_BLOCK.get());
+                        pOutput.accept(ModBlocks.ORICHALCUM_BLOCK.get());
+                        pOutput.accept(ModBlocks.RAW_ORICHALCUM_BLOCK.get());
                     })
                     .build());
 

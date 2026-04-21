@@ -18,10 +18,10 @@ public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS =
             DeferredRegister.create(ForgeRegistries.BLOCKS, OpmMod.MOD_ID);
 
-    public static final RegistryObject<Block> ORICHALQUE_BLOCK = registerBlock( "orichalque_block",
+    public static final RegistryObject<Block> ORICHALCUM_BLOCK = registerBlock( "orichalcum_block",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.NETHERITE_BLOCK)));
 
-    public static final RegistryObject<Block> RAW_ORICHALQUE_BLOCK = registerBlock( "raw_orichalque_block",
+    public static final RegistryObject<Block> RAW_ORICHALCUM_BLOCK = registerBlock( "raw_orichalcum_block",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.NETHERITE_BLOCK)));
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
