@@ -31,6 +31,8 @@ public class ModCreativeModTabs {
 
                         pOutput.accept(ModBlocks.ORICHALCUM_BLOCK.get());
                         pOutput.accept(ModBlocks.RAW_ORICHALCUM_BLOCK.get());
+                        pOutput.accept(ModBlocks.ORICHALCUM_ORE.get());
+                        pOutput.accept(ModBlocks.DEEPSLATE_ORICHALCUM_ORE.get());
                     })
                     .build());
 

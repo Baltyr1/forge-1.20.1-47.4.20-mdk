@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "opmmod:orichalcum_block"
+    }
+  ],
+  "result": {
+    "item": "opmmod:orichalcum",
+    "count": 9
+}
+  }
