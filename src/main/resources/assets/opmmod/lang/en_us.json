@@ -1,6 +1,10 @@
 {
   "item.opmmod.yen": "Yen",
-  "item.opmmod.tiger_class_essence": "Tiger_Class_Essence",
+  "item.opmmod.tiger_class_essence": "Tiger Class Essence",
+  "item.opmmod.nichirin_sword": "Nichirin Sword",
+
+  "block.opmmod.orichalque_block": "Block of Orichalque",
+
 
   "creativetab.opm_tab" : "OPM ITEMS"
 }

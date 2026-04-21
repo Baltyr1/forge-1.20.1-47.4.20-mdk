@@ -1,6 +1,7 @@
 package net.baltyr.opmmod;
 
 import com.mojang.logging.LogUtils;
+import net.baltyr.opmmod.block.ModBlocks;
 import net.baltyr.opmmod.item.ModCreativeModTabs;
 import net.baltyr.opmmod.item.ModItems;
 import net.minecraft.world.item.CreativeModeTab;
@@ -33,13 +34,12 @@ public class OpmMod
         ModCreativeModTabs.register(modEventBus);
 
         ModItems.register(modEventBus);
+        ModBlocks.register(modEventBus);
+
 
         modEventBus.addListener(this::commonSetup);
 
-        // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
-
-        // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
     }
 

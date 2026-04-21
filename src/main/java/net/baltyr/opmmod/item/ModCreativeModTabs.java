@@ -1,6 +1,7 @@
 package net.baltyr.opmmod.item;
 
 import net.baltyr.opmmod.OpmMod;
+import net.baltyr.opmmod.block.ModBlocks;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -24,8 +25,9 @@ public class ModCreativeModTabs {
                     .displayItems((pParameters, pOutput) -> {
                         pOutput.accept(ModItems.YEN.get());
                         pOutput.accept(ModItems.TIGER_CLASS_ESSENCE.get());
+                        pOutput.accept(ModItems.NICHIRIN_SWORD.get());
 
-                        pOutput.accept(Items.DIAMOND);
+                        pOutput.accept(ModBlocks.ORICHALQUE_BLOCK.get());
                     })
                     .build());
 
