@@ -23,3 +23,48 @@
 ### Effets Visuels ###
 - Utiliser photon
 
+### Class : ###
+# Force Brut #
+Saitama : Pas besoin d’en dire plus
+Super Black Alloy (Darkshine) : Énorme Tank.
+Tanktop Master : lance des rochers, détruit le sol, grosse patate
+
+# Artiste Martial #
+Bang (Silver Fang) : poing destructeur fluctuant (plus défensif)
+Bong : Poing pourfendeur tourbillonnant (plus offensif)
+Garou : mélange de pleins d'art martiaux
+Suiryu : utilise plus les coups de pieds
+
+# Ninja #
+Flashy Flash : glass canon ultra rapide
+Sonic le Foudroyant : glass canon moins rapide que flashy flash mais qui compte sur divers gadgets pour s’aider.
+
+# Cyborg #
+Genos : grosse puissance de feu avec moins de vie mais reste plutôt polyvalent
+Drive Knight : très polyvalent avec divers transformation
+
+# Utilisateur d'Armes #
+Atomic Samurai : découpe tout
+Metal Bat (Batte-man) : devient plus fort en fonction des dégâts pris
+Zombieman : Utilise des flingues et des haches + regen
+
+# Esper (Psychique) #
+Tatsumaki : Puissance de zone aberrante
+Fubuki (Blizzard) : Tatsumaki en moins fort
+
+# Invocateur / Contrôle à distance #
+Petit Empereur : utile pleins de gadget et un robot géant
+Metal Knight (Bofoy) : contrôle des drones/robots à distance 
+
+# Dominateur de l’univers #
+Boros : 3 formes, énorme dégâts et régen
+
+# N°1 des héros #
+Blast : Manipulation de l’espace (portail / gravité)
+
+# Cosmique #
+Cosmique Garou : Version ultime de l’artiste martial (copie les techniques)
+Empty Void : Version ultime du ninja (tranche les dimensions)
+
+
+
