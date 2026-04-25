@@ -1,0 +1,13 @@
+// 1.20.1	2026-04-25T18:19:27.6555202	Block States: opmmod
+e8b165f107d6abc1b982dee8f4f7d86663dcb739 assets/opmmod/blockstates/deepslate_orichalcum_ore.json
+486bb0a9ac6ff0f131ecacd0f8fed3cf7a67cb90 assets/opmmod/blockstates/orichalcum_block.json
+9731b9db1790c29160f954dae82d87088ba7ed22 assets/opmmod/blockstates/orichalcum_ore.json
+007fa18fa886e45947e845e268cfd0df568f317c assets/opmmod/blockstates/raw_orichalcum_block.json
+f2b9388e00384ce372abce77bc715e7bee2c9661 assets/opmmod/models/block/deepslate_orichalcum_ore.json
+7825596ecba7cc7757549578029878e6045fe99c assets/opmmod/models/block/orichalcum_block.json
+db691ed3ac1147b4967a2fcce23a048832ddce39 assets/opmmod/models/block/orichalcum_ore.json
+583ffb8397d0997504d699f0ad030de578790244 assets/opmmod/models/block/raw_orichalcum_block.json
+ae05595dc431fe3d8dcd0014e711d357b4da4449 assets/opmmod/models/item/deepslate_orichalcum_ore.json
+c0ebb4e0fdd5e2d2b3749f2b312c4b565f3b34f2 assets/opmmod/models/item/orichalcum_block.json
+a41635daf4cf87a8a70be084cd836a7310fee5a1 assets/opmmod/models/item/orichalcum_ore.json
+85e1dbb290260f0e18d0f208d441ecb761ddca48 assets/opmmod/models/item/raw_orichalcum_block.json
