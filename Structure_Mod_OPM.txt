@@ -1,1 +1,12 @@
-coucocu
+### Système de Jeu ###
+
+### Leveling Global ###
+
+### Leveling Dépendant du Pouvoir ###
+
+### HUD ###
+- Mettre une barre de vie
+
+### Effets Visuels ###
+- Utiliser photon
+
