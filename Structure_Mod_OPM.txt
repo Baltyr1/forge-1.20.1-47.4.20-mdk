@@ -12,16 +12,18 @@
 - Résistance 
 - Charisme
 
-
-### Leveling Dépendant du Pouvoir ###
-
-
-### Pouvoir ###
 ### HUD ###
 - Mettre une barre de vie
 
 ### Effets Visuels ###
 - Utiliser photon
+
+### progression ###
+Début : Choix d'une classe de base
+Mid-Game : Atteindre le Niveau Max
+End-Game : En fonction de la class,
+Briser le Limiteur pour éveiller ses compétences (à voir comment faire)
+Utiliser un Cube de God pour débloquer une Classe Secrète (empty Void, Cosmic Garou)
 
 ### Class : ###
 # Force Brut #
