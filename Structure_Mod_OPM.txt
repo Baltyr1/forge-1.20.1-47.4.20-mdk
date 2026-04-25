@@ -24,6 +24,7 @@ Mid-Game : Atteindre le Niveau Max
 End-Game : En fonction de la class,
 Briser le Limiteur pour éveiller ses compétences (à voir comment faire)
 Utiliser un Cube de God pour débloquer une Classe Secrète (empty Void, Cosmic Garou)
+à voir pour les cyborgs
 
 ### Class : ###
 # Force Brut #
