@@ -30,7 +30,7 @@ Super Black Alloy (Darkshine) : Énorme Tank.
 Tanktop Master : lance des rochers, détruit le sol, grosse patate
 
 # Artiste Martial #
-Bang (Silver Fang) : poing destructeur fluctuant (plus défensif)
+Bang : poing destructeur fluctuant (plus défensif)
 Bong : Poing pourfendeur tourbillonnant (plus offensif)
 Garou : mélange de pleins d'art martiaux
 Suiryu : utilise plus les coups de pieds
@@ -40,7 +40,7 @@ Flashy Flash : glass canon ultra rapide
 Sonic le Foudroyant : glass canon moins rapide que flashy flash mais qui compte sur divers gadgets pour s’aider.
 
 # Cyborg #
-Genos : grosse puissance de feu avec moins de vie mais reste plutôt polyvalent
+Genos : grosse puissance de feu avec une bonne polyvalence
 Drive Knight : très polyvalent avec divers transformation
 
 # Utilisateur d'Armes #
@@ -53,18 +53,18 @@ Tatsumaki : Puissance de zone aberrante
 Fubuki (Blizzard) : Tatsumaki en moins fort
 
 # Invocateur / Contrôle à distance #
-Petit Empereur : utile pleins de gadget et un robot géant
+Petit Empereur : utilise pleins de gadget et un robot géant
 Metal Knight (Bofoy) : contrôle des drones/robots à distance 
 
 # Dominateur de l’univers #
 Boros : 3 formes, énorme dégâts et régen
 
 # N°1 des héros #
-Blast : Manipulation de l’espace (portail / gravité)
+Blast : Manipulation de l’espace
 
 # Cosmique #
-Cosmique Garou : Version ultime de l’artiste martial (copie les techniques)
-Empty Void : Version ultime du ninja (tranche les dimensions)
+Cosmique Garou : class secrete de l’artiste martial (copie les techniques)
+Empty Void : class secrete du ninja (tranche les dimensions)
 
 
 
