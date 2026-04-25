@@ -1,4 +1,9 @@
 ### Système de Jeu ###
+- sytème de leveling
+- système de combat 
+- système récompense / shop etc...
+- système de pouvoir
+
 
 ### Leveling Global ###
 - Force
@@ -6,6 +11,8 @@
 - Intelligence
 - Résistance 
 - Charisme
+
+
 ### Leveling Dépendant du Pouvoir ###
 
 
