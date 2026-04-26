@@ -4,17 +4,20 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.baltyr.opmmod.classes.ModCapabilities;
 import net.baltyr.opmmod.classes.OpmClass;
+import net.baltyr.opmmod.network.PacketHandler;
+import net.baltyr.opmmod.network.SyncClassPacket;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.PacketDistributor;
 
 public class ClassCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("opmclass")
-                .requires(src -> src.hasPermission(2)) // OP level 2
+                .requires(src -> src.hasPermission(2))
 
                 // /opmclass set <joueur> <classe>
                 .then(Commands.literal("set")
@@ -34,10 +37,14 @@ public class ClassCommand {
                                                 cap.setPlayerClass(opmClass);
                                             });
 
-                                            ctx.getSource()
-                                                    .sendSuccess(() -> Component.literal("§aClasse de §e"
-                                                            + target.getName().getString()
-                                                            + "§a définie sur : " + opmClass.getFormattedName()), true);
+                                            PacketHandler.CHANNEL.send(
+                                                    PacketDistributor.PLAYER.with(() -> target),
+                                                    new SyncClassPacket(opmClass)
+                                            );
+
+                                            ctx.getSource().sendSuccess(() -> Component.literal("§aClasse de §e"
+                                                    + target.getName().getString()
+                                                    + "§a définie sur : " + opmClass.getFormattedName()), true);
 
                                             target.sendSystemMessage(Component.literal(
                                                     "§6Ta classe a été définie sur : " + opmClass.getFormattedName()));
@@ -52,7 +59,8 @@ public class ClassCommand {
                                     ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
                                     target.getCapability(ModCapabilities.PLAYER_CLASS).ifPresent(cap -> {
                                         ctx.getSource().sendSuccess(
-                                                () -> Component.literal("§eClasse de §f" + target.getName().getString()
+                                                () -> Component.literal("§eClasse de §f"
+                                                        + target.getName().getString()
                                                         + "§e : " + cap.getPlayerClass().getFormattedName()),
                                                 false);
                                     });

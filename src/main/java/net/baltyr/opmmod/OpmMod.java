@@ -5,6 +5,7 @@ import net.baltyr.opmmod.block.ModBlocks;
 import net.baltyr.opmmod.client.KeyBindings;
 import net.baltyr.opmmod.item.ModCreativeModTabs;
 import net.baltyr.opmmod.item.ModItems;
+import net.baltyr.opmmod.network.PacketHandler;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
@@ -31,6 +32,8 @@ public class OpmMod
     public OpmMod(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = context.getModEventBus();
+
+        PacketHandler.register();
 
         modEventBus.addListener(KeyBindings::onRegisterKeyMappings);
 
