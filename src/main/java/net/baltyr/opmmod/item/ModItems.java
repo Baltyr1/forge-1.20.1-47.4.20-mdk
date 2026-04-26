@@ -11,8 +11,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class ModItems {
-    public static final DeferredRegister<Item> ITEMS =
-            DeferredRegister.create(ForgeRegistries.ITEMS, OpmMod.MOD_ID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS,
+            OpmMod.MOD_ID);
 
     public static final RegistryObject<Item> YEN = ITEMS.register("yen",
             () -> new Item(new Item.Properties()));
@@ -27,7 +27,11 @@ public class ModItems {
     public static final RegistryObject<Item> NICHIRIN_SWORD = ITEMS.register("nichirin_sword",
             () -> new SwordItem(Tiers.NETHERITE, 4, -2.4f, new Item.Properties()));
 
-    public static void register(IEventBus eventBus) {
-        ITEMS.register(eventBus);
+    public static final RegistryObject<Item> CLASS_BOOK = ITEMS.register("class_book",
+            () -> new ClassBookItem(new Item.Properties().stacksTo(1)));
+
+    public static void register(IEventBus bus) {
+        ITEMS.register(bus);
+
     }
 }
