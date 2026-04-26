@@ -4,14 +4,6 @@
 - système récompense / shop etc...
 - système de pouvoir
 
-
-### Leveling Global ###
-- Force
-- Vitesse
-- Intelligence
-- Résistance 
-- Charisme
-
 ### HUD ###
 - Mettre une barre de vie
 
