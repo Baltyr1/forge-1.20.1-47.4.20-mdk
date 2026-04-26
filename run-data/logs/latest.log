@@ -1,34 +1,29 @@
-[25avr.2026 18:19:18.725] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgedatauserdev, --assetIndex, 5, --assetsDir, C:\Users\dufon\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.4.20, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412, --mod, opmmod, --all, --output, C:\Forge modding\forge-1.20.1-47.4.20-mdk\src\generated\resources, --existing, C:\Forge modding\forge-1.20.1-47.4.20-mdk\src\main\resources]
-[25avr.2026 18:19:18.731] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.12 by Oracle Corporation; OS Windows 11 arch amd64 version 10.0
-[25avr.2026 18:19:18.828] [main/WARN] [net.minecraftforge.fml.loading.FMLConfig/CORE]: Configuration file C:\Forge modding\forge-1.20.1-47.4.20-mdk\run-data\config\fml.toml is not correct. Correcting
-[25avr.2026 18:19:18.829] [main/INFO] [net.minecraftforge.fml.loading.FMLConfig/CORE]: Incorrect key [earlyWindowSkipGLVersions] was corrected from null to []
-[25avr.2026 18:19:18.829] [main/INFO] [net.minecraftforge.fml.loading.FMLConfig/CORE]: Incorrect key [earlyWindowLogHelpMessage] was corrected from null to true
-[25avr.2026 18:19:18.829] [main/INFO] [net.minecraftforge.fml.loading.FMLConfig/CORE]: Incorrect key [earlyWindowSquir] was corrected from null to false
-[25avr.2026 18:19:18.829] [main/INFO] [net.minecraftforge.fml.loading.FMLConfig/CORE]: Incorrect key [earlyWindowShowCPU] was corrected from null to false
-[25avr.2026 18:19:18.845] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgedatauserdev
-[25avr.2026 18:19:18.903] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/dufon/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23128!/ Service=ModLauncher Env=CLIENT
-[25avr.2026 18:19:19.215] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\dufon\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.4.20\c354b21002937b393c4f86163a98dccdf1d51e72\javafmllanguage-1.20.1-47.4.20.jar is missing mods.toml file
-[25avr.2026 18:19:19.219] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\dufon\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.4.20\865d75f8c18329ddb31db5856701ab86609108b5\lowcodelanguage-1.20.1-47.4.20.jar is missing mods.toml file
-[25avr.2026 18:19:19.222] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\dufon\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.4.20\af599930362212ae937e392709f49047e6abbbf\mclanguage-1.20.1-47.4.20.jar is missing mods.toml file
-[25avr.2026 18:19:19.225] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\dufon\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.4.20\e8cc697c69f3911e76caa2f005d9486597cd7448\fmlcore-1.20.1-47.4.20.jar is missing mods.toml file
-[25avr.2026 18:19:19.305] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: No dependencies to load found. Skipping!
-[25avr.2026 18:19:20.573] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgedatauserdev' with arguments [--gameDir, ., --assetsDir, C:\Users\dufon\.gradle\caches\forge_gradle\assets, --assetIndex, 5, --mod, opmmod, --all, --output, C:\Forge modding\forge-1.20.1-47.4.20-mdk\src\generated\resources, --existing, C:\Forge modding\forge-1.20.1-47.4.20-mdk\src\main\resources]
-[25avr.2026 18:19:20.929] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [opmmod]
-[25avr.2026 18:19:26.451] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.4.20, for MC 1.20.1 with MCP 20230612.114412
-[25avr.2026 18:19:26.461] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.4.20 Initialized
-[25avr.2026 18:19:27.083] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/dufon/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.4.20_mapped_parchment_2023.09.03-1.20.1/forge-1.20.1-47.4.20_mapped_parchment_2023.09.03-1.20.1-recomp.jar%23191!/assets/.mcassetsroot' uses unexpected schema
-[25avr.2026 18:19:27.084] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/dufon/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.4.20_mapped_parchment_2023.09.03-1.20.1/forge-1.20.1-47.4.20_mapped_parchment_2023.09.03-1.20.1-recomp.jar%23191!/data/.mcassetsroot' uses unexpected schema
-[25avr.2026 18:19:27.334] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Recipes
-[25avr.2026 18:19:27.404] [main/INFO] [net.minecraft.data.DataGenerator/]: Recipes finished after 67 ms
-[25avr.2026 18:19:27.404] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Loot Tables
-[25avr.2026 18:19:27.466] [main/INFO] [net.minecraft.data.DataGenerator/]: Loot Tables finished after 62 ms
-[25avr.2026 18:19:27.467] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Block States: opmmod
-[25avr.2026 18:19:27.628] [main/INFO] [net.minecraft.data.DataGenerator/]: Block States: opmmod finished after 160 ms
-[25avr.2026 18:19:27.628] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Item Models: opmmod
-[25avr.2026 18:19:27.634] [main/INFO] [net.minecraft.data.DataGenerator/]: Item Models: opmmod finished after 6 ms
-[25avr.2026 18:19:27.635] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:block mod id opmmod
-[25avr.2026 18:19:27.653] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:block mod id opmmod finished after 18 ms
-[25avr.2026 18:19:27.653] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:item mod id opmmod
-[25avr.2026 18:19:27.654] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:item mod id opmmod finished after 1 ms
-[25avr.2026 18:19:27.654] [main/INFO] [net.minecraft.data.DataGenerator/]: All providers took: 320 ms
-[25avr.2026 18:19:27.674] [main/INFO] [net.minecraft.data.HashCache/]: Caching: total files: 39, old count: 0, new count: 40, removed stale: 0, written: 39
+[26avr.2026 19:12:45.302] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgedatauserdev, --assetIndex, 5, --assetsDir, C:\Users\dufon\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.4.20, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412, --mod, opmmod, --all, --output, C:\Forge modding\forge-1.20.1-47.4.20-mdk\src\generated\resources, --existing, C:\Forge modding\forge-1.20.1-47.4.20-mdk\src\main\resources]
+[26avr.2026 19:12:45.306] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.12 by Oracle Corporation; OS Windows 11 arch amd64 version 10.0
+[26avr.2026 19:12:45.459] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgedatauserdev
+[26avr.2026 19:12:45.527] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/dufon/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23128!/ Service=ModLauncher Env=CLIENT
+[26avr.2026 19:12:45.823] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\dufon\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.4.20\c354b21002937b393c4f86163a98dccdf1d51e72\javafmllanguage-1.20.1-47.4.20.jar is missing mods.toml file
+[26avr.2026 19:12:45.827] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\dufon\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.4.20\865d75f8c18329ddb31db5856701ab86609108b5\lowcodelanguage-1.20.1-47.4.20.jar is missing mods.toml file
+[26avr.2026 19:12:45.830] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\dufon\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.4.20\af599930362212ae937e392709f49047e6abbbf\mclanguage-1.20.1-47.4.20.jar is missing mods.toml file
+[26avr.2026 19:12:45.834] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\dufon\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.4.20\e8cc697c69f3911e76caa2f005d9486597cd7448\fmlcore-1.20.1-47.4.20.jar is missing mods.toml file
+[26avr.2026 19:12:45.915] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: No dependencies to load found. Skipping!
+[26avr.2026 19:12:47.169] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgedatauserdev' with arguments [--gameDir, ., --assetsDir, C:\Users\dufon\.gradle\caches\forge_gradle\assets, --assetIndex, 5, --mod, opmmod, --all, --output, C:\Forge modding\forge-1.20.1-47.4.20-mdk\src\generated\resources, --existing, C:\Forge modding\forge-1.20.1-47.4.20-mdk\src\main\resources]
+[26avr.2026 19:12:47.499] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [opmmod]
+[26avr.2026 19:12:52.665] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.4.20, for MC 1.20.1 with MCP 20230612.114412
+[26avr.2026 19:12:52.668] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.4.20 Initialized
+[26avr.2026 19:12:53.333] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/dufon/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.4.20_mapped_parchment_2023.09.03-1.20.1/forge-1.20.1-47.4.20_mapped_parchment_2023.09.03-1.20.1-recomp.jar%23191!/assets/.mcassetsroot' uses unexpected schema
+[26avr.2026 19:12:53.333] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/dufon/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.4.20_mapped_parchment_2023.09.03-1.20.1/forge-1.20.1-47.4.20_mapped_parchment_2023.09.03-1.20.1-recomp.jar%23191!/data/.mcassetsroot' uses unexpected schema
+[26avr.2026 19:12:53.658] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Recipes
+[26avr.2026 19:12:53.714] [main/INFO] [net.minecraft.data.DataGenerator/]: Recipes finished after 56 ms
+[26avr.2026 19:12:53.716] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Loot Tables
+[26avr.2026 19:12:53.793] [main/INFO] [net.minecraft.data.DataGenerator/]: Loot Tables finished after 77 ms
+[26avr.2026 19:12:53.794] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Block States: opmmod
+[26avr.2026 19:12:53.971] [main/INFO] [net.minecraft.data.DataGenerator/]: Block States: opmmod finished after 177 ms
+[26avr.2026 19:12:53.971] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Item Models: opmmod
+[26avr.2026 19:12:53.976] [main/INFO] [net.minecraft.data.DataGenerator/]: Item Models: opmmod finished after 4 ms
+[26avr.2026 19:12:53.976] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:block mod id opmmod
+[26avr.2026 19:12:53.994] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:block mod id opmmod finished after 18 ms
+[26avr.2026 19:12:53.994] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:item mod id opmmod
+[26avr.2026 19:12:53.995] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:item mod id opmmod finished after 0 ms
+[26avr.2026 19:12:53.995] [main/INFO] [net.minecraft.data.DataGenerator/]: All providers took: 338 ms
+[26avr.2026 19:12:54.004] [main/INFO] [net.minecraft.data.HashCache/]: Caching: total files: 39, old count: 39, new count: 40, removed stale: 0, written: 0

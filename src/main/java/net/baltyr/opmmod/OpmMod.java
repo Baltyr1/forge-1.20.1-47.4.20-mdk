@@ -2,6 +2,7 @@ package net.baltyr.opmmod;
 
 import com.mojang.logging.LogUtils;
 import net.baltyr.opmmod.block.ModBlocks;
+import net.baltyr.opmmod.client.KeyBindings;
 import net.baltyr.opmmod.item.ModCreativeModTabs;
 import net.baltyr.opmmod.item.ModItems;
 import net.minecraft.world.item.CreativeModeTab;
@@ -30,6 +31,8 @@ public class OpmMod
     public OpmMod(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = context.getModEventBus();
+
+        modEventBus.addListener(KeyBindings::onRegisterKeyMappings);
 
         ModCreativeModTabs.register(modEventBus);
 
