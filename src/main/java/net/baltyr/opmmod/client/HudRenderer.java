@@ -17,74 +17,86 @@ public class HudRenderer {
     private static final int BAR_H = 5;
     private static final int SEGMENTS = 10;
 
+    // Animation du déplacement
+    private static float animOffset = 0f;
+    private static final float ANIM_SPEED = 0.15f;
+
     @SubscribeEvent
     public static void onRenderHealth(RenderGuiOverlayEvent.Pre event) {
-        if (event.getOverlay() != VanillaGuiOverlay.PLAYER_HEALTH.type())
-            return;
+        if (event.getOverlay() != VanillaGuiOverlay.PLAYER_HEALTH.type()) return;
         event.setCanceled(true);
 
         Minecraft mc = Minecraft.getInstance();
-        if (mc.player == null)
-            return;
+        if (mc.player == null) return;
         Player player = mc.player;
 
-        float health = player.getHealth();
+        float health    = player.getHealth();
         float maxHealth = player.getMaxHealth();
-        float pct = Math.max(0f, Math.min(1f, health / maxHealth));
+        float pct       = Math.max(0f, Math.min(1f, health / maxHealth));
 
-        GuiGraphics gfx = event.getGuiGraphics();
+        GuiGraphics gfx    = event.getGuiGraphics();
         int screenW = mc.getWindow().getGuiScaledWidth();
         int screenH = mc.getWindow().getGuiScaledHeight();
 
-        // ── Centré horizontalement, en bas ───────────────────────────────────
-        int x = (screenW - BAR_W) / 2;
-        int y = screenH - 39;
+        boolean combat = CombatModeHandler.isInCombatMode();
 
-        // ── Couleurs dynamiques : vert → jaune → rouge ────────────────────────
+        // Animation smooth
+        float targetOffset = combat ? 1f : 0f;
+        animOffset += (targetOffset - animOffset) * ANIM_SPEED;
+
+        // Position normale : centrée en bas
+        // Position combat : décalée à gauche et vers le haut
+        int normalX = (screenW - BAR_W) / 2;
+        int normalY = screenH - 39;
+
+        int combatX = 12;
+        int combatY = screenH - 80;
+
+        int x = (int)(normalX + (combatX - normalX) * animOffset);
+        int y = (int)(normalY + (combatY - normalY) * animOffset);
+
+        // Couleurs dynamiques
         int fillTop, fillBot, fillShine;
         if (pct > 0.5f) {
-            // Vert pur (100%) → Jaune (50%)
-            float t = (pct - 0.5f) * 2f; // 1.0 à pleine vie, 0.0 à mi-vie
-            int r = (int) (0xAA * (1f - t) + 0x11 * t); // rouge monte vers jaune
-            int g = 0xCC;                                 // vert reste stable
+            float t = (pct - 0.5f) * 2f;
+            int r = (int)(0xAA * (1f - t) + 0x11 * t);
+            int g = 0xCC;
             int b = 0x11;
-            fillTop  = rgb(r, g, b);
-            fillBot  = rgb((int)(r * 0.6f), (int)(g * 0.6f), b);
+            fillTop   = rgb(r, g, b);
+            fillBot   = rgb((int)(r * 0.6f), (int)(g * 0.6f), b);
             fillShine = rgb(Math.min(255, r + 40), Math.min(255, g + 30), b + 10);
         } else {
-            // Jaune (50%) → Rouge (0%)
-            float t = pct * 2f; // 1.0 à mi-vie, 0.0 à 0 vie
+            float t = pct * 2f;
             int r = 0xFF;
-            int g = (int) (0xAA * t); // vert disparaît
+            int g = (int)(0xAA * t);
             int b = 0x00;
-            fillTop  = rgb(r, g, b);
-            fillBot  = rgb((int)(r * 0.6f), (int)(g * 0.6f), b);
+            fillTop   = rgb(r, g, b);
+            fillBot   = rgb((int)(r * 0.6f), (int)(g * 0.6f), b);
             fillShine = rgb(255, Math.min(255, g + 60), 40);
         }
 
-        // ── Bordure (or RPG) ──────────────────────────────────────────────────
+        // Bordures
         gfx.fill(x - 2, y - 2, x + BAR_W + 2, y + BAR_H + 2, 0xFF0D0D00);
         gfx.fill(x - 1, y - 1, x + BAR_W + 1, y + BAR_H + 1, 0xFFAA8800);
-
-        // ── Fond ──────────────────────────────────────────────────────────────
+        // Fond
         gfx.fill(x, y, x + BAR_W, y + BAR_H, 0xFF111111);
 
-        // ── Remplissage dégradé ───────────────────────────────────────────────
-        int fillW = (int) (BAR_W * pct);
+        // Remplissage
+        int fillW = (int)(BAR_W * pct);
         if (fillW > 0) {
             int half = BAR_H / 2;
             gfx.fill(x, y + half, x + fillW, y + BAR_H, fillBot);
-            gfx.fill(x, y, x + fillW, y + half, fillTop);
-            gfx.fill(x, y, x + fillW, y + 1, fillShine);
+            gfx.fill(x, y,        x + fillW, y + half,  fillTop);
+            gfx.fill(x, y,        x + fillW, y + 1,     fillShine);
         }
 
-        // ── Séparateurs ───────────────────────────────────────────────────────
+        // Séparateurs
         for (int i = 1; i < SEGMENTS; i++) {
             int sx = x + (BAR_W * i / SEGMENTS);
             gfx.fill(sx, y, sx + 1, y + BAR_H, 0x77000000);
         }
 
-        // ── Coins dorés ───────────────────────────────────────────────────────
+        // Coins dorés
         int gold = 0xFFFFCC00;
         gfx.fill(x - 1, y - 1, x + 2, y,          gold);
         gfx.fill(x - 1, y - 1, x,     y + 2,       gold);
@@ -95,13 +107,12 @@ public class HudRenderer {
         gfx.fill(x + BAR_W - 1, y + BAR_H, x + BAR_W + 1, y + BAR_H + 1, gold);
         gfx.fill(x + BAR_W,     y + BAR_H - 1, x + BAR_W + 1, y + BAR_H + 1, gold);
 
-        // ── Texte ─────────────────────────────────────────────────────────────
-        String label = "\u2665 " + (int) health + "/" + (int) maxHealth;
-        int labelX = x + (BAR_W - mc.font.width(label)) / 2; // centré sur la barre
+        // Texte
+        String label = "\u2665 " + (int)health + "/" + (int)maxHealth;
+        int labelX = x + (BAR_W - mc.font.width(label)) / 2;
         gfx.drawString(mc.font, label, labelX, y - 10, 0xFFFFDDDD, true);
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
     private static int rgb(int r, int g, int b) {
         return 0xFF000000 | ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | (b & 0xFF);
     }

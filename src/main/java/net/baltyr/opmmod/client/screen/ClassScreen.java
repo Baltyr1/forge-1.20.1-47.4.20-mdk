@@ -66,13 +66,9 @@ public class ClassScreen extends Screen {
         wx = (this.width  - WIN_W) / 2;
         wy = (this.height - WIN_H) / 2;
 
-        // Ombre
         gfx.fill(wx + 5, wy + 5, wx + WIN_W + 5, wy + WIN_H + 5, 0xAA000000);
-        // Corps
         gfx.fill(wx, wy, wx + WIN_W, wy + WIN_H, 0xFF0A0A0F);
-        // Ligne titre
         gfx.fill(wx + 8, wy + 20, wx + WIN_W - 8, wy + 21, 0xFF886600);
-        // Bordures
         drawBorder(gfx, wx - 2, wy - 2, WIN_W + 4, WIN_H + 4, 0xFF050508);
         drawBorder(gfx, wx - 1, wy - 1, WIN_W + 2, WIN_H + 2, 0xFF886600);
         drawCorners(gfx, wx - 1, wy - 1, WIN_W + 2, WIN_H + 2, 0xFFFFCC00);
@@ -97,7 +93,6 @@ public class ClassScreen extends Screen {
         int cy = wy + 28;
         int px = wx + 14;
 
-        // ── Portrait ──────────────────────────────────────────────────────
         gfx.fill(px, cy, px + 52, cy + 52, 0xFF121220);
         drawBorder(gfx, px - 1, cy - 1, 54, 54, 0xFF886600);
         drawCorners(gfx, px - 1, cy - 1, 54, 54, 0xFFFFCC00);
@@ -107,26 +102,23 @@ public class ClassScreen extends Screen {
             float deltaX = (float)(px + 26) - mouseX;
             float deltaY = (float)(cy + 26) - mouseY;
 
-            // Exactement comme InventoryScreen vanilla
             float bodyYRot = (float) Math.atan(deltaX / 40.0f) * 20.0f;
             float headYRot = (float) Math.atan(deltaX / 40.0f) * 40.0f;
             float headXRot = -(float) Math.atan(deltaY / 40.0f) * 20.0f;
 
-            // Sauvegarde
-            float savedYBodyRot      = player.yBodyRot;
-            float savedYBodyRotO     = player.yBodyRotO;
-            float savedYRot          = player.getYRot();
-            float savedXRot          = player.getXRot();
-            float savedYHeadRot      = player.yHeadRot;
-            float savedYHeadRotO     = player.yHeadRotO;
+            float savedYBodyRot  = player.yBodyRot;
+            float savedYBodyRotO = player.yBodyRotO;
+            float savedYRot      = player.getYRot();
+            float savedXRot      = player.getXRot();
+            float savedYHeadRot  = player.yHeadRot;
+            float savedYHeadRotO = player.yHeadRotO;
 
-            // Force face à nous
-            player.yBodyRot      = 180.0f + bodyYRot;
-            player.yBodyRotO     = 180.0f + bodyYRot;
+            player.yBodyRot  = 180.0f + bodyYRot;
+            player.yBodyRotO = 180.0f + bodyYRot;
             player.setYRot(180.0f + headYRot);
             player.setXRot(headXRot);
-            player.yHeadRot      = player.getYRot();
-            player.yHeadRotO     = player.getYRot();
+            player.yHeadRot  = player.getYRot();
+            player.yHeadRotO = player.getYRot();
 
             org.joml.Quaternionf rotation  = new org.joml.Quaternionf().rotateZ((float) Math.PI);
             org.joml.Quaternionf cameraRot = new org.joml.Quaternionf();
@@ -141,44 +133,33 @@ public class ClassScreen extends Screen {
             );
 
             InventoryScreen.renderEntityInInventory(
-                    gfx,
-                    px + 26,
-                    cy + 46,
-                    18,
-                    rotation,
-                    cameraRot,
-                    player
+                    gfx, px + 26, cy + 46, 18, rotation, cameraRot, player
             );
 
             com.mojang.blaze3d.systems.RenderSystem.disableScissor();
 
-            // Restaure
-            player.yBodyRot      = savedYBodyRot;
-            player.yBodyRotO     = savedYBodyRotO;
+            player.yBodyRot  = savedYBodyRot;
+            player.yBodyRotO = savedYBodyRotO;
             player.setYRot(savedYRot);
             player.setXRot(savedXRot);
-            player.yHeadRot      = savedYHeadRot;
-            player.yHeadRotO     = savedYHeadRotO;
+            player.yHeadRot  = savedYHeadRot;
+            player.yHeadRotO = savedYHeadRotO;
         }
-        // ── Infos classe ──────────────────────────────────────────────────
+
         int tx = px + 62;
         String classLabel = currentClass != OpmClass.NONE
-                ? currentClass.getFormattedName()
-                : "§7Aucune";
+                ? currentClass.getFormattedName() : "§7Aucune";
         gfx.drawString(this.font, "§6Classe  §8: " + classLabel,  tx, cy,      0xFFDDDDDD, false);
         gfx.drawString(this.font, "§6Rang    §8: §7—",             tx, cy + 12, 0xFFDDDDDD, false);
         gfx.drawString(this.font, "§6XP      §8: §70 §8/ §7100",   tx, cy + 24, 0xFFDDDDDD, false);
 
-        // Barre XP
         int bx = tx;
         int by = cy + 38;
         int bw = WIN_W - 100;
         drawBorder(gfx, bx - 1, by - 1, bw + 2, 8, 0xFF886600);
         gfx.fill(bx, by, bx + bw, by + 6, 0xFF111111);
 
-        // ── Description ───────────────────────────────────────────────────
         int descY = cy + 56;
-
         gfx.fill(wx + 8, descY, wx + WIN_W - 8, descY + 1, 0xFF222233);
 
         if (currentClass != OpmClass.NONE && !currentClass.getDescription().isEmpty()) {
@@ -194,12 +175,10 @@ public class ClassScreen extends Screen {
                     wx + WIN_W / 2, descY + 12, 0xFF444455);
         }
 
-        // ── Séparateur liste ──────────────────────────────────────────────
         int sep = descY + 50;
         gfx.fill(wx + 8, sep, wx + WIN_W - 8, sep + 1, 0xFF222233);
         gfx.drawString(this.font, "§6Toutes les classes", wx + 14, sep + 5, 0xFFAA8800, false);
 
-        // ── Liste scrollable ──────────────────────────────────────────────
         int listX = wx + 14;
         int listY = sep + 18;
         int listW = WIN_W - 32;
@@ -218,7 +197,7 @@ public class ClassScreen extends Screen {
             int rowY = listY + i * ROW_H;
 
             boolean isHovered = mouseX >= listX && mouseX < listX + listW
-                    && mouseY >= rowY  && mouseY < rowY + ROW_H;
+                    && mouseY >= rowY && mouseY < rowY + ROW_H;
             boolean isCurrent = cls == currentClass;
 
             if (isCurrent)
@@ -238,7 +217,6 @@ public class ClassScreen extends Screen {
                 gfx.fill(listX + 2, rowY + ROW_H - 1, listX + listW - 2, rowY + ROW_H, 0xFF1A1A2A);
         }
 
-        // Scrollbar
         int maxScroll = Math.max(1, classes.length - 1 - VISIBLE_CLASSES);
         if (maxScroll > 0) {
             int sbX    = listX + listW + 3;
@@ -254,7 +232,7 @@ public class ClassScreen extends Screen {
     // ─────────────────────────────────────────────────────────────────────
     private void renderTechniqueTab(GuiGraphics gfx, int mouseX, int mouseY) {
         OpmClass currentClass = getPlayerClass();
-        int cy = wy + 30;
+        int cy = wy + 28;
 
         gfx.drawString(this.font, "§6Techniques disponibles", wx + 14, cy, 0xFFAA8800, false);
         gfx.fill(wx + 8, cy + 11, wx + WIN_W - 8, cy + 12, 0xFF222233);
@@ -262,54 +240,76 @@ public class ClassScreen extends Screen {
         if (currentClass == OpmClass.NONE) {
             gfx.drawCenteredString(this.font,
                     "§7Aucune technique disponible",
-                    wx + WIN_W / 2, cy + 30, 0xFF555566);
+                    wx + WIN_W / 2, cy + 40, 0xFF555566);
             gfx.drawCenteredString(this.font,
                     "§8Choisissez d'abord une classe",
-                    wx + WIN_W / 2, cy + 44, 0xFF444455);
-        } else {
-            gfx.drawCenteredString(this.font,
-                    "§7Classe : " + currentClass.getFormattedName(),
-                    wx + WIN_W / 2, cy + 22, 0xFFCCCCCC);
-            gfx.drawCenteredString(this.font,
-                    "§8Les techniques arriveront bientôt !",
-                    wx + WIN_W / 2, cy + 36, 0xFF444455);
+                    wx + WIN_W / 2, cy + 54, 0xFF444455);
+            return;
         }
 
-        // Grille 4×2
-        int cols = 4, rows = 2, slotSize = 40, gap = 6;
-        int gridW = cols * slotSize + (cols - 1) * gap;
-        int gx = wx + (WIN_W - gridW) / 2 - 28;
-        int gy = cy + 55;
+        gfx.drawString(this.font,
+                "§8Classe : " + currentClass.getFormattedName(),
+                wx + 14, cy + 16, 0xFFAAAAAA, false);
 
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++) {
-                int sx = gx + col * (slotSize + gap);
-                int sy = gy + row * (slotSize + gap);
-                boolean hov = mouseX >= sx && mouseX < sx + slotSize
-                        && mouseY >= sy && mouseY < sy + slotSize;
-                gfx.fill(sx, sy, sx + slotSize, sy + slotSize,
-                        hov ? 0xFF141420 : 0xFF0D0D18);
-                drawBorder(gfx, sx - 1, sy - 1, slotSize + 2, slotSize + 2,
-                        hov ? 0xFF886600 : 0xFF2A2A3A);
-                gfx.drawCenteredString(this.font, "§8+",
-                        sx + slotSize / 2, sy + slotSize / 2 - 4, 0xFF2A2A3A);
+        int SLOT_SIZE = 40;
+        int SLOT_GAP  = 5;
+        int totalW    = 6 * SLOT_SIZE + 5 * SLOT_GAP;
+        int startX    = wx + (WIN_W - totalW) / 2;
+        int startY    = cy + 34;
+
+        String[] keys = {"&", "é", "\"", "'", "(", "-"};
+
+        for (int i = 0; i < 6; i++) {
+            int sx = startX + i * (SLOT_SIZE + SLOT_GAP);
+            int sy = startY;
+
+            boolean hov = mouseX >= sx && mouseX < sx + SLOT_SIZE
+                    && mouseY >= sy && mouseY < sy + SLOT_SIZE;
+
+            gfx.fill(sx, sy, sx + SLOT_SIZE, sy + SLOT_SIZE,
+                    hov ? 0xFF141428 : 0xFF0A0A18);
+            drawBorder(gfx, sx - 1, sy - 1, SLOT_SIZE + 2, SLOT_SIZE + 2,
+                    hov ? 0xFF886600 : 0xFF333355);
+            if (hov) drawCorners(gfx, sx - 1, sy - 1, SLOT_SIZE + 2, SLOT_SIZE + 2, 0xFFFFCC00);
+
+            gfx.drawString(this.font, "§8" + keys[i], sx + 3, sy + 3, 0xFF444466, false);
+            gfx.drawCenteredString(this.font, "§8+",
+                    sx + SLOT_SIZE / 2, sy + SLOT_SIZE / 2 - 4, 0xFF222244);
+            gfx.drawCenteredString(this.font, "§8" + (i + 1),
+                    sx + SLOT_SIZE / 2, sy + SLOT_SIZE - 9, 0xFF333355);
+        }
+
+        int infoY = startY + SLOT_SIZE + 12;
+        gfx.fill(wx + 8, infoY - 2, wx + WIN_W - 8, infoY - 1, 0xFF222233);
+
+        int hoveredSlot = -1;
+        for (int i = 0; i < 6; i++) {
+            int sx = startX + i * (SLOT_SIZE + SLOT_GAP);
+            if (mouseX >= sx && mouseX < sx + SLOT_SIZE
+                    && mouseY >= startY && mouseY < startY + SLOT_SIZE) {
+                hoveredSlot = i;
+                break;
             }
         }
 
-        // Slots équipés
-        int ex = gx + gridW + 16;
-        int ey = gy;
-        gfx.drawCenteredString(this.font, "§6Équipé", ex + 22, ey - 10, 0xFFAA8800);
-        gfx.fill(ex, ey, ex + 44, ey + 44, 0xFF0A0A14);
-        drawBorder(gfx, ex - 1, ey - 1, 46, 46, 0xFF886600);
-        drawCorners(gfx, ex - 1, ey - 1, 46, 46, 0xFFFFCC00);
-        gfx.drawCenteredString(this.font, "§8Vide", ex + 22, ey + 18, 0xFF333344);
+        if (hoveredSlot >= 0) {
+            gfx.drawString(this.font,
+                    "§6Slot " + (hoveredSlot + 1) + " §8[" + keys[hoveredSlot] + "]",
+                    wx + 14, infoY + 4, 0xFFAA8800, false);
+            gfx.drawString(this.font,
+                    "§7Aucune technique équipée",
+                    wx + 14, infoY + 16, 0xFF888899, false);
+        } else {
+            gfx.drawCenteredString(this.font,
+                    "§8Survole un slot pour voir les détails",
+                    wx + WIN_W / 2, infoY + 8, 0xFF333355);
+        }
 
-        int ey2 = ey + 52;
-        gfx.drawCenteredString(this.font, "§8Slot 2", ex + 22, ey2 - 10, 0xFF333344);
-        gfx.fill(ex, ey2, ex + 44, ey2 + 44, 0xFF080810);
-        drawBorder(gfx, ex - 1, ey2 - 1, 46, 46, 0xFF333344);
-        gfx.drawCenteredString(this.font, "§8Vide", ex + 22, ey2 + 18, 0xFF222233);
+        int hintY = wy + WIN_H - 22;
+        gfx.fill(wx + 8, hintY - 2, wx + WIN_W - 8, hintY - 1, 0xFF222233);
+        gfx.drawCenteredString(this.font,
+                "§8Active le mode combat avec §6C §8pour utiliser tes techniques",
+                wx + WIN_W / 2, hintY + 4, 0xFF444455);
     }
 
     // ─────────────────────────────────────────────────────────────────────
