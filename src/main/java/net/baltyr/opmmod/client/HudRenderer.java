@@ -13,11 +13,10 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = OpmMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class HudRenderer {
 
-    private static final int BAR_W = 100;
-    private static final int BAR_H = 5;
+    private static final int BAR_W    = 81;
+    private static final int BAR_H    = 5;
     private static final int SEGMENTS = 10;
 
-    // Animation du déplacement
     private static float animOffset = 0f;
     private static final float ANIM_SPEED = 0.15f;
 
@@ -34,28 +33,23 @@ public class HudRenderer {
         float maxHealth = player.getMaxHealth();
         float pct       = Math.max(0f, Math.min(1f, health / maxHealth));
 
-        GuiGraphics gfx    = event.getGuiGraphics();
+        GuiGraphics gfx = event.getGuiGraphics();
         int screenW = mc.getWindow().getGuiScaledWidth();
         int screenH = mc.getWindow().getGuiScaledHeight();
 
         boolean combat = CombatModeHandler.isInCombatMode();
-
-        // Animation smooth
         float targetOffset = combat ? 1f : 0f;
         animOffset += (targetOffset - animOffset) * ANIM_SPEED;
 
-        // Position normale : centrée en bas
-        // Position combat : décalée à gauche et vers le haut
-        int normalX = (screenW - BAR_W) / 2;
+        // Position normale → légèrement décalé à gauche en combat
+        int normalX = screenW / 2 - 91;
+        int combatX = screenW / 2 - 91 - 20;
         int normalY = screenH - 39;
-
-        int combatX = 12;
-        int combatY = screenH - 80;
+        int combatY = screenH - 84;
 
         int x = (int)(normalX + (combatX - normalX) * animOffset);
         int y = (int)(normalY + (combatY - normalY) * animOffset);
 
-        // Couleurs dynamiques
         int fillTop, fillBot, fillShine;
         if (pct > 0.5f) {
             float t = (pct - 0.5f) * 2f;
@@ -75,13 +69,10 @@ public class HudRenderer {
             fillShine = rgb(255, Math.min(255, g + 60), 40);
         }
 
-        // Bordures
         gfx.fill(x - 2, y - 2, x + BAR_W + 2, y + BAR_H + 2, 0xFF0D0D00);
         gfx.fill(x - 1, y - 1, x + BAR_W + 1, y + BAR_H + 1, 0xFFAA8800);
-        // Fond
         gfx.fill(x, y, x + BAR_W, y + BAR_H, 0xFF111111);
 
-        // Remplissage
         int fillW = (int)(BAR_W * pct);
         if (fillW > 0) {
             int half = BAR_H / 2;
@@ -90,27 +81,41 @@ public class HudRenderer {
             gfx.fill(x, y,        x + fillW, y + 1,     fillShine);
         }
 
-        // Séparateurs
         for (int i = 1; i < SEGMENTS; i++) {
             int sx = x + (BAR_W * i / SEGMENTS);
             gfx.fill(sx, y, sx + 1, y + BAR_H, 0x77000000);
         }
 
-        // Coins dorés
         int gold = 0xFFFFCC00;
-        gfx.fill(x - 1, y - 1, x + 2, y,          gold);
-        gfx.fill(x - 1, y - 1, x,     y + 2,       gold);
-        gfx.fill(x + BAR_W - 1, y - 1, x + BAR_W + 1, y,     gold);
-        gfx.fill(x + BAR_W,     y - 1, x + BAR_W + 1, y + 2, gold);
-        gfx.fill(x - 1, y + BAR_H, x + 2,         y + BAR_H + 1, gold);
-        gfx.fill(x - 1, y + BAR_H - 1, x,         y + BAR_H + 1, gold);
+        gfx.fill(x - 1, y - 1, x + 2,             y,                 gold);
+        gfx.fill(x - 1, y - 1, x,                 y + 2,             gold);
+        gfx.fill(x + BAR_W - 1, y - 1, x + BAR_W + 1, y,             gold);
+        gfx.fill(x + BAR_W,     y - 1, x + BAR_W + 1, y + 2,         gold);
+        gfx.fill(x - 1, y + BAR_H,     x + 2,         y + BAR_H + 1, gold);
+        gfx.fill(x - 1, y + BAR_H - 1, x,             y + BAR_H + 1, gold);
         gfx.fill(x + BAR_W - 1, y + BAR_H, x + BAR_W + 1, y + BAR_H + 1, gold);
         gfx.fill(x + BAR_W,     y + BAR_H - 1, x + BAR_W + 1, y + BAR_H + 1, gold);
 
-        // Texte
         String label = "\u2665 " + (int)health + "/" + (int)maxHealth;
         int labelX = x + (BAR_W - mc.font.width(label)) / 2;
         gfx.drawString(mc.font, label, labelX, y - 10, 0xFFFFDDDD, true);
+    }
+
+    @SubscribeEvent
+    public static void onRenderFoodPre(RenderGuiOverlayEvent.Pre event) {
+        if (event.getOverlay() != VanillaGuiOverlay.FOOD_LEVEL.type()) return;
+        // Toujours pushPose, même si offset = 0, pour garantir le popPose
+        int offsetX = (int)(20 * animOffset);
+        int offsetY = (int)(-48 * animOffset);
+        event.getGuiGraphics().pose().pushPose();
+        event.getGuiGraphics().pose().translate(offsetX, offsetY, 0);
+    }
+
+    @SubscribeEvent
+    public static void onRenderFoodPost(RenderGuiOverlayEvent.Post event) {
+        if (event.getOverlay() != VanillaGuiOverlay.FOOD_LEVEL.type()) return;
+        // Toujours popPose pour correspondre au pushPose
+        event.getGuiGraphics().pose().popPose();
     }
 
     private static int rgb(int r, int g, int b) {

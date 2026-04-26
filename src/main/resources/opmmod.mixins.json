@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "net.baltyr.opmmod.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [],
+  "client": [
+    "GuiMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

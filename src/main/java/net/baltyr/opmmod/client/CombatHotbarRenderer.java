@@ -17,83 +17,99 @@ public class CombatHotbarRenderer {
     private static final int SLOT_GAP  = 3;
     private static final int SLOTS     = 9;
 
-    // Animation slide depuis la gauche
     private static float slideAnim = 0f;
     private static final float ANIM_SPEED = 0.15f;
 
+    // ── Cache la hotbar vanilla en la poussant hors écran ─────────────────
     @SubscribeEvent
-    public static void onRenderHotbar(RenderGuiOverlayEvent.Pre event) {
+    public static void onHotbarPre(RenderGuiOverlayEvent.Pre event) {
         if (event.getOverlay() != VanillaGuiOverlay.HOTBAR.type()) return;
 
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
 
         boolean combat = CombatModeHandler.isInCombatMode();
-
-        // Animation
         float target = combat ? 1f : 0f;
         slideAnim += (target - slideAnim) * ANIM_SPEED;
 
-        // Si on n'est pas du tout en mode combat, on laisse le rendu vanilla
         if (slideAnim < 0.01f) return;
 
-        // Annule la hotbar vanilla
-        event.setCanceled(true);
+        // Clippe la zone de rendu de la hotbar vanilla à une zone vide (hors écran)
+        // Alternative : clippe hors écran
+        int screenH = mc.getWindow().getHeight();
+        int guiScale = (int) mc.getWindow().getGuiScale();
+        com.mojang.blaze3d.systems.RenderSystem.enableScissor(0, screenH + 1, 1, 1);
+    }
 
-        GuiGraphics gfx    = event.getGuiGraphics();
+    @SubscribeEvent
+    public static void onHotbarPost(RenderGuiOverlayEvent.Post event) {
+        if (event.getOverlay() != VanillaGuiOverlay.HOTBAR.type()) return;
+        if (slideAnim < 0.01f) return;
+
+        com.mojang.blaze3d.systems.RenderSystem.disableScissor();
+
+        // Dessine la hotbar verticale
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null || mc.screen != null) return;
+        // ... reste du code inchangé
+
+        GuiGraphics gfx = event.getGuiGraphics();
+        int screenW = mc.getWindow().getGuiScaledWidth();
         int screenH = mc.getWindow().getGuiScaledHeight();
 
-        int totalH  = SLOTS * SLOT_SIZE + (SLOTS - 1) * SLOT_GAP;
-        int baseY   = (screenH - totalH) / 2;
+        int totalH    = SLOTS * SLOT_SIZE + (SLOTS - 1) * SLOT_GAP;
+        int centeredY = (screenH - totalH) / 2;
 
-        // Slide depuis la gauche : -SLOT_SIZE-10 → 6
-        int offscreenX = -(SLOT_SIZE + 14);
-        int onscreenX  = 6;
-        int baseX = (int)(offscreenX + (onscreenX - offscreenX) * slideAnim);
-
-        // Fond du panel
-        int panelX = baseX - 4;
-        int panelY = baseY - 4;
+        int panelX = 6;
+        int panelY = centeredY - 4;
         int panelW = SLOT_SIZE + 8;
         int panelH = totalH + 8;
 
-        gfx.fill(panelX + 2, panelY + 2, panelX + panelW + 2, panelY + panelH + 2, 0x88000000);
-        gfx.fill(panelX, panelY, panelX + panelW, panelY + panelH, 0xCC0A0A0F);
-        drawBorder(gfx, panelX - 1, panelY - 1, panelW + 2, panelH + 2, 0xFF886600);
-        drawBorder(gfx, panelX - 2, panelY - 2, panelW + 4, panelH + 4, 0xFF050508);
-        drawCorners(gfx, panelX - 1, panelY - 1, panelW + 2, panelH + 2, 0xFFFFCC00);
+        if (slideAnim > 0.3f) {
+            int alpha   = (int)(0xCC * slideAnim);
+            int bgColor = (alpha << 24) | 0x000A0A0F;
+            gfx.fill(panelX + 2, panelY + 2, panelX + panelW + 2, panelY + panelH + 2,
+                    ((int)(0x88 * slideAnim)) << 24);
+            gfx.fill(panelX, panelY, panelX + panelW, panelY + panelH, bgColor);
+            drawBorder(gfx, panelX - 1, panelY - 1, panelW + 2, panelH + 2,
+                    blendColor(0xFF886600, slideAnim));
+            drawBorder(gfx, panelX - 2, panelY - 2, panelW + 4, panelH + 4,
+                    blendColor(0xFF050508, slideAnim));
+            drawCorners(gfx, panelX - 1, panelY - 1, panelW + 2, panelH + 2,
+                    blendColor(0xFFFFCC00, slideAnim));
+        }
 
         int selected = mc.player.getInventory().selected;
 
         for (int i = 0; i < SLOTS; i++) {
-            int sx = baseX;
-            int sy = baseY + i * (SLOT_SIZE + SLOT_GAP);
+            int sx = panelX + 4;
+            int sy = centeredY + i * (SLOT_SIZE + SLOT_GAP);
 
             boolean isSelected = (i == selected);
 
-            // Fond slot
             gfx.fill(sx, sy, sx + SLOT_SIZE, sy + SLOT_SIZE,
                     isSelected ? 0xFF1A1A28 : 0xFF0A0A18);
-
-            // Bordure slot
             drawBorder(gfx, sx - 1, sy - 1, SLOT_SIZE + 2, SLOT_SIZE + 2,
                     isSelected ? 0xFFFFCC00 : 0xFF333355);
             if (isSelected)
                 drawCorners(gfx, sx - 1, sy - 1, SLOT_SIZE + 2, SLOT_SIZE + 2, 0xFFFFEE44);
 
-            // Item
             ItemStack stack = mc.player.getInventory().getItem(i);
             if (!stack.isEmpty()) {
                 gfx.renderItem(stack, sx + 2, sy + 2);
                 gfx.renderItemDecorations(mc.font, stack, sx + 2, sy + 2);
             }
 
-            // Numéro du slot (1-9)
             if (!isSelected) {
                 gfx.drawString(mc.font, String.valueOf(i + 1),
                         sx + SLOT_SIZE - 6, sy + 1, 0xFF333355, false);
             }
         }
+    }
+
+    private static int blendColor(int color, float alpha) {
+        int a = (int)(((color >> 24) & 0xFF) * alpha);
+        return (a << 24) | (color & 0x00FFFFFF);
     }
 
     private static void drawBorder(GuiGraphics gfx, int x, int y, int w, int h, int color) {
