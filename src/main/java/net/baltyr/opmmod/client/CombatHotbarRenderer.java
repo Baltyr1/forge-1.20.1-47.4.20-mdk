@@ -15,13 +15,13 @@ public class CombatHotbarRenderer {
 
     // ── Layout constants (utilisés aussi par HudRenderer) ────────────────────
     public static final int PANEL_X = 4;
-    public static final int PANEL_W = 34;   // largeur du panneau
-    static final        int SLOT_W  = 20;
-    static final        int SLOT_H  = 20;
-    static final        int SLOT_GAP = 2;
+    public static final int PANEL_W = 26;   // était 34
+    static final        int SLOT_W  = 16;   // était 20
+    static final        int SLOT_H  = 16;   // était 20
+    static final        int SLOT_GAP = 1;   // était 2
     static final        int SLOTS   = 9;
-    private static final int TOTAL_H = SLOTS * SLOT_H + (SLOTS - 1) * SLOT_GAP; // 196
-    public  static final int PANEL_H = TOTAL_H + 8;                               // 204
+    private static final int TOTAL_H = SLOTS * SLOT_H + (SLOTS - 1) * SLOT_GAP; // 152
+    public  static final int PANEL_H = TOTAL_H + 6;                               // 158                               // 204
 
     private static float slideAnim = 0f;
     private static final float ANIM_SPEED = 0.12f;
@@ -85,24 +85,13 @@ public class CombatHotbarRenderer {
     }
 
     private static void drawLabel(GuiGraphics gfx, Minecraft mc, int py) {
-        if (slideAnim < 0.4f) return;
-        float t = (slideAnim - 0.4f) / 0.6f;
-
-        // Texte "COMBAT"
-        String lbl = "COMBAT";
-        int lx = PANEL_X + (PANEL_W - mc.font.width(lbl)) / 2;
-        gfx.drawString(mc.font, lbl, lx, py - 15, blend(0xFFFFCC00, t), false);
-
-        // Ligne séparatrice or sous le label
-        gfx.fill(PANEL_X + 3, py - 4,
-                 PANEL_X + PANEL_W - 3, py - 3,
-                 blend(0xBBFFCC00, t));
+        // supprimé
     }
 
     // ── Slots ─────────────────────────────────────────────────────────────────
 
     private static void drawSlots(GuiGraphics gfx, Minecraft mc, int py) {
-        int sx       = PANEL_X + 7;
+        int sx = PANEL_X + 5;  // était 7
         int selected = mc.player.getInventory().selected;
 
         for (int i = 0; i < SLOTS; i++) {

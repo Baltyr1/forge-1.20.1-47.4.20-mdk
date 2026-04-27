@@ -16,10 +16,14 @@ public class HudRenderer {
     private static float animOffset = 0f;
     private static final float ANIM_SPEED = 0.12f;
 
-    // Doit correspondre aux constantes de CombatHotbarRenderer
     private static final int PANEL_X = 4;
-    private static final int PANEL_W = 34;
-    private static final int PANEL_H = 204;
+    private static final int PANEL_W = 26;
+    private static final int PANEL_H = 158;
+
+    // Barre de combat : SLOTS=6, SLOT_SIZE=30, SLOT_GAP=4 → totalW = 6*30 + 5*4 = 200
+    private static final int COMBAT_TOTAL_W = 200;
+    private static final int HALF_BAR_W     = COMBAT_TOTAL_W / 2 - 2;
+    private static final int BAR_H          = 4;
 
     private static int panelTopY(int screenH) {
         return (screenH - PANEL_H) / 2;
@@ -40,23 +44,24 @@ public class HudRenderer {
         float anim = animOffset;
 
         Player player = mc.player;
-        float hp      = player.getHealth();
-        float maxHp   = player.getMaxHealth();
-        float pct     = Math.max(0f, Math.min(1f, hp / maxHp));
+        float hp    = player.getHealth();
+        float maxHp = player.getMaxHealth();
+        float pct   = Math.max(0f, Math.min(1f, hp / maxHp));
 
         GuiGraphics gfx = event.getGuiGraphics();
         int sw = mc.getWindow().getGuiScaledWidth();
         int sh = mc.getWindow().getGuiScaledHeight();
-        int py = panelTopY(sh);
 
-        // Interpolation position / taille : mode normal → mode combat
-        int bx = lerpi(sw / 2 - 91, PANEL_X,      anim);
-        int by = lerpi(sh - 39,      py - 40,      anim);
-        int bw = lerpi(81,           PANEL_W,      anim);
-        int bh = lerpi(5,            10,           anim);
+        int combatBaseX  = (sw - COMBAT_TOTAL_W) / 2;
+        int combatPanelY = sh - 55 - 14;
+        int targetY      = combatPanelY - BAR_H - 3;
+
+        int bx = lerpi(sw / 2 - 91, combatBaseX, anim);
+        int by = lerpi(sh - 39,     targetY, anim);
+        int bw = lerpi(81,          HALF_BAR_W, anim);
+        int bh = lerpi(5,           BAR_H, anim);
         if (bh < 1) bh = 1;
 
-        // Couleur de remplissage selon % de vie
         int fillTop, fillBot, shine;
         if (pct > 0.5f) {
             float t = (pct - 0.5f) * 2f;
@@ -71,12 +76,9 @@ public class HudRenderer {
             shine   = rgb(0xFF, Math.min(255, (int)(0xCC * t) + 40), 0x20);
         }
 
-        // Encadrement double (noir profond + or)
-        gfx.fill(bx - 2, by - 2, bx + bw + 2, by + bh + 2, 0xFF0C0900);
         gfx.fill(bx - 1, by - 1, bx + bw + 1, by + bh + 1, 0xFFAA7700);
-        // Fond sombre
         gfx.fill(bx, by, bx + bw, by + bh, 0xFF111111);
-        // Remplissage
+
         int fw = (int)(bw * pct);
         if (fw > 0) {
             int half = Math.max(1, bh / 2);
@@ -84,21 +86,14 @@ public class HudRenderer {
             gfx.fill(bx, by,        bx + fw, by + half, fillTop);
             gfx.fill(bx, by,        bx + fw, by + 1,    shine);
         }
-        // Coins dorés
         drawCorners(gfx, bx - 1, by - 1, bw + 2, bh + 2, 0xFFFFCC00);
 
-        // Label ♥ HP/maxHP
         String lbl = "♥ " + (int)hp + "/" + (int)maxHp;
-        int lx = bx + (bw - mc.font.width(lbl)) / 2;
-        if (bh >= 8) {
-            // Mode combat : label animé au-dessus de la barre
-            int la = (int)(255 * Math.min(1f, Math.max(0f, (anim - 0.5f) * 2f)));
-            if (la > 0)
-                gfx.drawString(mc.font, lbl, lx, by - 11, (la << 24) | 0xFFDDDD, false);
-        } else {
-            // Mode normal : label toujours visible
-            gfx.drawString(mc.font, lbl, lx, by - 11, 0xFFFFDDDD, true);
-        }
+        int la = (int)(255 * Math.min(1f, Math.max(0f, (anim - 0.5f) * 2f)));
+        if (la > 0)
+            gfx.drawString(mc.font, lbl, bx, by - 9, (la << 24) | 0xFFDDDD, false);
+        else
+            gfx.drawString(mc.font, lbl, bx, by - 9, 0xFFFFDDDD, true);
     }
 
     // ── Barre de faim ─────────────────────────────────────────────────────────
@@ -106,42 +101,46 @@ public class HudRenderer {
     @SubscribeEvent
     public static void onFoodPre(RenderGuiOverlayEvent.Pre event) {
         if (event.getOverlay() != VanillaGuiOverlay.FOOD_LEVEL.type()) return;
-
-        if (animOffset < 0.01f) return; // faim vanilla en dehors du mode combat
-
+        if (animOffset < 0.01f) return;
         event.setCanceled(true);
 
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
 
         int foodLevel = mc.player.getFoodData().getFoodLevel();
-        float pct     = Math.max(0f, Math.min(1f, foodLevel / 20f));
-        float anim    = animOffset;
+        float pct  = Math.max(0f, Math.min(1f, foodLevel / 20f));
+        float anim = animOffset;
 
         GuiGraphics gfx = event.getGuiGraphics();
+        int sw = mc.getWindow().getGuiScaledWidth();
         int sh = mc.getWindow().getGuiScaledHeight();
-        int py = panelTopY(sh);
 
-        int bx = PANEL_X;
-        int by = py - 26;
-        int bw = PANEL_W;
-        int bh = 6;
+        int combatBaseX  = (sw - COMBAT_TOTAL_W) / 2;
+        int combatPanelY = sh - 55 - 14;
+        int targetY      = combatPanelY - BAR_H - 3;
+
+        int bx = combatBaseX + HALF_BAR_W + 4;
+        int by = targetY;
+        int bw = HALF_BAR_W;
+        int bh = BAR_H;
 
         int fillColor = pct > 0.5f ? 0xFFCC7733 : 0xFFFF5500;
 
-        // Encadrement or-brun
-        gfx.fill(bx - 1, by - 1, bx + bw + 1, by + bh + 1,
-                blend(0xFF664400, anim));
-        // Fond
+        gfx.fill(bx - 1, by - 1, bx + bw + 1, by + bh + 1, blend(0xFF664400, anim));
         gfx.fill(bx, by, bx + bw, by + bh, 0xFF0A0604);
-        // Remplissage
+
         int fw = (int)(bw * pct);
         if (fw > 0) {
             gfx.fill(bx, by, bx + fw, by + bh, blend(fillColor, anim));
             gfx.fill(bx, by, bx + fw, by + 1,  blend(0xFFFFCC88, anim));
         }
-        // Coins or-chaud
         drawCorners(gfx, bx - 1, by - 1, bw + 2, bh + 2, blend(0xFFFFAA33, anim));
+
+        String lbl = foodLevel + "/20";
+        int la  = (int)(255 * Math.min(1f, Math.max(0f, (anim - 0.5f) * 2f)));
+        int lx  = bx + bw - mc.font.width(lbl);
+        if (la > 0)
+            gfx.drawString(mc.font, lbl, lx, by - 9, (la << 24) | 0xFFCC88, false);
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────

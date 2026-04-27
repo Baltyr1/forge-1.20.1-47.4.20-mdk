@@ -19,5 +19,10 @@ public class PacketHandler {
                 SyncClassPacket::decode,
                 SyncClassPacket::handle
         );
+        CHANNEL.registerMessage(1, UseAbilityPacket.class,
+                UseAbilityPacket::encode,
+                UseAbilityPacket::decode,
+                UseAbilityPacket::handle
+        );
     }
 }

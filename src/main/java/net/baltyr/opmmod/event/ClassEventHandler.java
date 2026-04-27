@@ -64,4 +64,9 @@ public class ClassEventHandler {
             });
         }
     }
+
+    @SubscribeEvent
+    public static void onRegisterCommands(RegisterCommandsEvent event) {
+        ClassCommand.register(event.getDispatcher());
+    }
 }

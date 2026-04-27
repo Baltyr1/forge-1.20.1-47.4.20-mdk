@@ -1,6 +1,7 @@
 package net.baltyr.opmmod.client;
 
 import net.baltyr.opmmod.OpmMod;
+import net.baltyr.opmmod.client.abilities.AbilityHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraftforge.api.distmarker.Dist;
@@ -12,17 +13,20 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = OpmMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class CombatHud {
 
-    private static final int SLOT_SIZE = 40;
-    private static final int SLOT_GAP  = 6;
+    private static final int SLOT_SIZE = 30;
+    private static final int SLOT_GAP  = 4;
     private static final int SLOTS     = 6;
-    private static final int BAR_H     = 6;
+    private static final int BAR_H     = 8;
 
     public static float stamina    = 100f;
     public static float maxStamina = 100f;
 
+    private static final String[] ABILITY_NAMES = {
+            "Poing", "Consec.", "Dash", "Table", "Sérieux", ""
+    };
+
     @SubscribeEvent
     public static void onRenderOverlay(RenderGuiOverlayEvent.Post event) {
-        // ← déclenche uniquement après la hotbar, une seule fois
         if (event.getOverlay() != VanillaGuiOverlay.EXPERIENCE_BAR.type()) return;
 
         Minecraft mc = Minecraft.getInstance();
@@ -35,17 +39,17 @@ public class CombatHud {
 
         int totalW = SLOTS * SLOT_SIZE + (SLOTS - 1) * SLOT_GAP;
         int baseX  = (screenW - totalW) / 2;
-        int baseY  = screenH - 60;
+        int baseY  = screenH - 55;
 
         renderCombatBar(gfx, mc, baseX, baseY, totalW);
     }
 
     private static void renderCombatBar(GuiGraphics gfx, Minecraft mc,
                                         int baseX, int baseY, int totalW) {
-        int panelX = baseX - 10;
-        int panelY = baseY - 18;
-        int panelW = totalW + 20;
-        int panelH = SLOT_SIZE + 28;
+        int panelX = baseX - 8;
+        int panelY = baseY - 14;
+        int panelW = totalW + 16;
+        int panelH = SLOT_SIZE + 26;
 
         gfx.fill(panelX + 3, panelY + 3, panelX + panelW + 3, panelY + panelH + 3, 0x88000000);
         gfx.fill(panelX, panelY, panelX + panelW, panelY + panelH, 0xCC0A0A0F);
@@ -54,9 +58,9 @@ public class CombatHud {
         drawCorners(gfx, panelX - 1, panelY - 1, panelW + 2, panelH + 2, 0xFFFFCC00);
 
         // ── Barre de stamina ───────────────────────────────────────────────
-        int stX = panelX + 6;
-        int stY = panelY + 5;
-        int stW = panelW - 12;
+        int stX = panelX + 5;
+        int stY = panelY + 4;
+        int stW = panelW - 10;
 
         float pct  = Math.max(0f, Math.min(1f, stamina / maxStamina));
         int fillW  = (int)(stW * pct);
@@ -72,8 +76,8 @@ public class CombatHud {
         }
 
         String stLabel = "⚡ " + (int)stamina + " / " + (int)maxStamina;
-        gfx.drawCenteredString(mc.font, stLabel,
-                stX + stW / 2, stY + 1, 0xFF88CCFF);
+        int textY = stY + (BAR_H - 8) / 2;
+        gfx.drawCenteredString(mc.font, stLabel, stX + stW / 2, textY, 0xFFFFFFFF);
 
         // ── Slots ──────────────────────────────────────────────────────────
         String[] keys = {"&", "é", "\"", "'", "(", "-"};
@@ -81,16 +85,37 @@ public class CombatHud {
             int sx = baseX + i * (SLOT_SIZE + SLOT_GAP);
             int sy = baseY;
 
-            gfx.fill(sx, sy, sx + SLOT_SIZE, sy + SLOT_SIZE, 0xFF0A0A18);
-            drawBorder(gfx, sx - 1, sy - 1, SLOT_SIZE + 2, SLOT_SIZE + 2, 0xFF444466);
-            gfx.drawString(mc.font, "§8" + keys[i], sx + 2, sy + 2, 0xFF555577, false);
-            gfx.drawCenteredString(mc.font, "§8+",
-                    sx + SLOT_SIZE / 2, sy + SLOT_SIZE / 2 - 4, 0xFF222244);
-        }
+            boolean onCD = i < 5 && AbilityHandler.isOnCooldown(i);
+            gfx.fill(sx, sy, sx + SLOT_SIZE, sy + SLOT_SIZE,
+                    onCD ? 0xFF1A0A00 : 0xFF0A0A18);
+            drawBorder(gfx, sx - 1, sy - 1, SLOT_SIZE + 2, SLOT_SIZE + 2,
+                    onCD ? 0xFF884400 : 0xFF444466);
 
-        // ── Label MODE COMBAT ──────────────────────────────────────────────
-        gfx.drawCenteredString(mc.font, "§6⚔ MODE COMBAT",
-                baseX + totalW / 2, panelY - 12, 0xFFFFCC00);
+            // Overlay cooldown
+            if (onCD) {
+                float cdPct = AbilityHandler.getCooldownProgress(i);
+                int cdH = (int)(SLOT_SIZE * cdPct);
+                gfx.fill(sx, sy, sx + SLOT_SIZE, sy + cdH, 0x99000000);
+
+                int secs = AbilityHandler.getCooldownSeconds(i);
+                String cdStr = secs + "s";
+                int cx = sx + (SLOT_SIZE - mc.font.width(cdStr)) / 2;
+                int cy = sy + SLOT_SIZE / 2 - 4;
+                gfx.drawString(mc.font, cdStr, cx, cy, 0xFFFF6600, false);
+            }
+
+            // Nom capacité
+            if (i < ABILITY_NAMES.length && !ABILITY_NAMES[i].isEmpty()) {
+                gfx.drawString(mc.font, ABILITY_NAMES[i], sx + 2, sy + 2,
+                        onCD ? 0xFF886633 : 0xFF8888AA, false);
+            }
+
+            // Touche
+            gfx.drawString(mc.font, "§8" + keys[i],
+                    sx + SLOT_SIZE - mc.font.width(keys[i]) - 2,
+                    sy + SLOT_SIZE - 9,
+                    onCD ? 0xFF553300 : 0xFF555577, false);
+        }
     }
 
     private static void drawBorder(GuiGraphics gfx, int x, int y, int w, int h, int color) {
