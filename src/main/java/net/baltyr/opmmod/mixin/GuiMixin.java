@@ -15,9 +15,9 @@ public class GuiMixin {
             method = "renderHotbar(FLnet/minecraft/client/gui/GuiGraphics;)V",
             at = @At("HEAD"),
             cancellable = true,
-            remap = false
+            remap = true
     )
-    private void onRenderHotbar(float partialTick, GuiGraphics guiGraphics, CallbackInfo ci) {
+    private void cancelHotbar(float pPartialTick, GuiGraphics pGuiGraphics, CallbackInfo ci) {
         if (CombatModeHandler.isInCombatMode()) {
             ci.cancel();
         }

@@ -13,112 +13,160 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = OpmMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class HudRenderer {
 
-    private static final int BAR_W    = 81;
-    private static final int BAR_H    = 5;
-    private static final int SEGMENTS = 10;
-
     private static float animOffset = 0f;
-    private static final float ANIM_SPEED = 0.15f;
+    private static final float ANIM_SPEED = 0.12f;
+
+    // Doit correspondre aux constantes de CombatHotbarRenderer
+    private static final int PANEL_X = 4;
+    private static final int PANEL_W = 34;
+    private static final int PANEL_H = 204;
+
+    private static int panelTopY(int screenH) {
+        return (screenH - PANEL_H) / 2;
+    }
+
+    // ── Barre de vie ──────────────────────────────────────────────────────────
 
     @SubscribeEvent
-    public static void onRenderHealth(RenderGuiOverlayEvent.Pre event) {
+    public static void onHealthPre(RenderGuiOverlayEvent.Pre event) {
         if (event.getOverlay() != VanillaGuiOverlay.PLAYER_HEALTH.type()) return;
         event.setCanceled(true);
 
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
-        Player player = mc.player;
-
-        float health    = player.getHealth();
-        float maxHealth = player.getMaxHealth();
-        float pct       = Math.max(0f, Math.min(1f, health / maxHealth));
-
-        GuiGraphics gfx = event.getGuiGraphics();
-        int screenW = mc.getWindow().getGuiScaledWidth();
-        int screenH = mc.getWindow().getGuiScaledHeight();
 
         boolean combat = CombatModeHandler.isInCombatMode();
-        float targetOffset = combat ? 1f : 0f;
-        animOffset += (targetOffset - animOffset) * ANIM_SPEED;
+        animOffset += ((combat ? 1f : 0f) - animOffset) * ANIM_SPEED;
+        float anim = animOffset;
 
-        // Position normale → légèrement décalé à gauche en combat
-        int normalX = screenW / 2 - 91;
-        int combatX = screenW / 2 - 91 - 20;
-        int normalY = screenH - 39;
-        int combatY = screenH - 84;
+        Player player = mc.player;
+        float hp      = player.getHealth();
+        float maxHp   = player.getMaxHealth();
+        float pct     = Math.max(0f, Math.min(1f, hp / maxHp));
 
-        int x = (int)(normalX + (combatX - normalX) * animOffset);
-        int y = (int)(normalY + (combatY - normalY) * animOffset);
+        GuiGraphics gfx = event.getGuiGraphics();
+        int sw = mc.getWindow().getGuiScaledWidth();
+        int sh = mc.getWindow().getGuiScaledHeight();
+        int py = panelTopY(sh);
 
-        int fillTop, fillBot, fillShine;
+        // Interpolation position / taille : mode normal → mode combat
+        int bx = lerpi(sw / 2 - 91, PANEL_X,      anim);
+        int by = lerpi(sh - 39,      py - 40,      anim);
+        int bw = lerpi(81,           PANEL_W,      anim);
+        int bh = lerpi(5,            10,           anim);
+        if (bh < 1) bh = 1;
+
+        // Couleur de remplissage selon % de vie
+        int fillTop, fillBot, shine;
         if (pct > 0.5f) {
             float t = (pct - 0.5f) * 2f;
-            int r = (int)(0xAA * (1f - t) + 0x11 * t);
-            int g = 0xCC;
-            int b = 0x11;
-            fillTop   = rgb(r, g, b);
-            fillBot   = rgb((int)(r * 0.6f), (int)(g * 0.6f), b);
-            fillShine = rgb(Math.min(255, r + 40), Math.min(255, g + 30), b + 10);
+            int r   = (int)(0xAA * (1f - t) + 0x11 * t);
+            fillTop = rgb(r,               0xCC, 0x11);
+            fillBot = rgb((int)(r * 0.6f), 0x77, 0x08);
+            shine   = rgb(Math.min(255, r + 50), 0xEE, 0x33);
         } else {
             float t = pct * 2f;
-            int r = 0xFF;
-            int g = (int)(0xAA * t);
-            int b = 0x00;
-            fillTop   = rgb(r, g, b);
-            fillBot   = rgb((int)(r * 0.6f), (int)(g * 0.6f), b);
-            fillShine = rgb(255, Math.min(255, g + 60), 40);
+            fillTop = rgb(0xFF, (int)(0xAA * t), 0x00);
+            fillBot = rgb(0x99, (int)(0x66 * t), 0x00);
+            shine   = rgb(0xFF, Math.min(255, (int)(0xCC * t) + 40), 0x20);
         }
 
-        gfx.fill(x - 2, y - 2, x + BAR_W + 2, y + BAR_H + 2, 0xFF0D0D00);
-        gfx.fill(x - 1, y - 1, x + BAR_W + 1, y + BAR_H + 1, 0xFFAA8800);
-        gfx.fill(x, y, x + BAR_W, y + BAR_H, 0xFF111111);
-
-        int fillW = (int)(BAR_W * pct);
-        if (fillW > 0) {
-            int half = BAR_H / 2;
-            gfx.fill(x, y + half, x + fillW, y + BAR_H, fillBot);
-            gfx.fill(x, y,        x + fillW, y + half,  fillTop);
-            gfx.fill(x, y,        x + fillW, y + 1,     fillShine);
+        // Encadrement double (noir profond + or)
+        gfx.fill(bx - 2, by - 2, bx + bw + 2, by + bh + 2, 0xFF0C0900);
+        gfx.fill(bx - 1, by - 1, bx + bw + 1, by + bh + 1, 0xFFAA7700);
+        // Fond sombre
+        gfx.fill(bx, by, bx + bw, by + bh, 0xFF111111);
+        // Remplissage
+        int fw = (int)(bw * pct);
+        if (fw > 0) {
+            int half = Math.max(1, bh / 2);
+            gfx.fill(bx, by + half, bx + fw, by + bh, fillBot);
+            gfx.fill(bx, by,        bx + fw, by + half, fillTop);
+            gfx.fill(bx, by,        bx + fw, by + 1,    shine);
         }
+        // Coins dorés
+        drawCorners(gfx, bx - 1, by - 1, bw + 2, bh + 2, 0xFFFFCC00);
 
-        for (int i = 1; i < SEGMENTS; i++) {
-            int sx = x + (BAR_W * i / SEGMENTS);
-            gfx.fill(sx, y, sx + 1, y + BAR_H, 0x77000000);
+        // Label ♥ HP/maxHP
+        String lbl = "♥ " + (int)hp + "/" + (int)maxHp;
+        int lx = bx + (bw - mc.font.width(lbl)) / 2;
+        if (bh >= 8) {
+            // Mode combat : label animé au-dessus de la barre
+            int la = (int)(255 * Math.min(1f, Math.max(0f, (anim - 0.5f) * 2f)));
+            if (la > 0)
+                gfx.drawString(mc.font, lbl, lx, by - 11, (la << 24) | 0xFFDDDD, false);
+        } else {
+            // Mode normal : label toujours visible
+            gfx.drawString(mc.font, lbl, lx, by - 11, 0xFFFFDDDD, true);
         }
-
-        int gold = 0xFFFFCC00;
-        gfx.fill(x - 1, y - 1, x + 2,             y,                 gold);
-        gfx.fill(x - 1, y - 1, x,                 y + 2,             gold);
-        gfx.fill(x + BAR_W - 1, y - 1, x + BAR_W + 1, y,             gold);
-        gfx.fill(x + BAR_W,     y - 1, x + BAR_W + 1, y + 2,         gold);
-        gfx.fill(x - 1, y + BAR_H,     x + 2,         y + BAR_H + 1, gold);
-        gfx.fill(x - 1, y + BAR_H - 1, x,             y + BAR_H + 1, gold);
-        gfx.fill(x + BAR_W - 1, y + BAR_H, x + BAR_W + 1, y + BAR_H + 1, gold);
-        gfx.fill(x + BAR_W,     y + BAR_H - 1, x + BAR_W + 1, y + BAR_H + 1, gold);
-
-        String label = "\u2665 " + (int)health + "/" + (int)maxHealth;
-        int labelX = x + (BAR_W - mc.font.width(label)) / 2;
-        gfx.drawString(mc.font, label, labelX, y - 10, 0xFFFFDDDD, true);
     }
 
-    @SubscribeEvent
-    public static void onRenderFoodPre(RenderGuiOverlayEvent.Pre event) {
-        if (event.getOverlay() != VanillaGuiOverlay.FOOD_LEVEL.type()) return;
-        // Toujours pushPose, même si offset = 0, pour garantir le popPose
-        int offsetX = (int)(20 * animOffset);
-        int offsetY = (int)(-48 * animOffset);
-        event.getGuiGraphics().pose().pushPose();
-        event.getGuiGraphics().pose().translate(offsetX, offsetY, 0);
-    }
+    // ── Barre de faim ─────────────────────────────────────────────────────────
 
     @SubscribeEvent
-    public static void onRenderFoodPost(RenderGuiOverlayEvent.Post event) {
+    public static void onFoodPre(RenderGuiOverlayEvent.Pre event) {
         if (event.getOverlay() != VanillaGuiOverlay.FOOD_LEVEL.type()) return;
-        // Toujours popPose pour correspondre au pushPose
-        event.getGuiGraphics().pose().popPose();
+
+        if (animOffset < 0.01f) return; // faim vanilla en dehors du mode combat
+
+        event.setCanceled(true);
+
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null) return;
+
+        int foodLevel = mc.player.getFoodData().getFoodLevel();
+        float pct     = Math.max(0f, Math.min(1f, foodLevel / 20f));
+        float anim    = animOffset;
+
+        GuiGraphics gfx = event.getGuiGraphics();
+        int sh = mc.getWindow().getGuiScaledHeight();
+        int py = panelTopY(sh);
+
+        int bx = PANEL_X;
+        int by = py - 26;
+        int bw = PANEL_W;
+        int bh = 6;
+
+        int fillColor = pct > 0.5f ? 0xFFCC7733 : 0xFFFF5500;
+
+        // Encadrement or-brun
+        gfx.fill(bx - 1, by - 1, bx + bw + 1, by + bh + 1,
+                blend(0xFF664400, anim));
+        // Fond
+        gfx.fill(bx, by, bx + bw, by + bh, 0xFF0A0604);
+        // Remplissage
+        int fw = (int)(bw * pct);
+        if (fw > 0) {
+            gfx.fill(bx, by, bx + fw, by + bh, blend(fillColor, anim));
+            gfx.fill(bx, by, bx + fw, by + 1,  blend(0xFFFFCC88, anim));
+        }
+        // Coins or-chaud
+        drawCorners(gfx, bx - 1, by - 1, bw + 2, bh + 2, blend(0xFFFFAA33, anim));
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
+    private static int lerpi(int a, int b, float t) {
+        return (int)(a + (b - a) * t);
     }
 
     private static int rgb(int r, int g, int b) {
         return 0xFF000000 | ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | (b & 0xFF);
+    }
+
+    private static int blend(int color, float alpha) {
+        int a = (int)(((color >> 24) & 0xFF) * alpha);
+        return (a << 24) | (color & 0x00FFFFFF);
+    }
+
+    private static void drawCorners(GuiGraphics g, int x, int y, int w, int h, int c) {
+        g.fill(x,         y,         x + 3, y + 1, c);
+        g.fill(x,         y,         x + 1, y + 3, c);
+        g.fill(x + w - 3, y,         x + w, y + 1, c);
+        g.fill(x + w - 1, y,         x + w, y + 3, c);
+        g.fill(x,         y + h - 1, x + 3, y + h, c);
+        g.fill(x,         y + h - 3, x + 1, y + h, c);
+        g.fill(x + w - 3, y + h - 1, x + w, y + h, c);
+        g.fill(x + w - 1, y + h - 3, x + w, y + h, c);
     }
 }
