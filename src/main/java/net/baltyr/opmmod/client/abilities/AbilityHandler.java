@@ -23,13 +23,13 @@ public class AbilityHandler {
     public static final int SLOT_TABLE_FLIP    = 3;
     public static final int SLOT_SERIOUS_PUNCH = 4;
 
-    private static final float[] STAMINA_COST   = { 10f, 25f, 30f, 35f, 50f };
-    private static final int[]   COOLDOWN_TICKS = { 10, 60, 100, 120, 200 };
+    private static final float[] STAMINA_COST   = { 10f, 20f, 25f, 30f, 60f };
+    //                                              0.8s  4s   6s   8s   20s
+    private static final int[]   COOLDOWN_TICKS = { 16,  80,  120, 160, 400 };
 
-    // Cooldowns côté client (pour affichage uniquement)
     public static final int[] cooldowns = new int[5];
 
-    // Sauts latéraux : mouvement côté client
+    // Sauts latéraux mouvement côté client
     private static boolean sideHopsActive = false;
     private static int     sideHopsTicks  = 0;
     private static int     sideHopsDir    = 1;
@@ -46,7 +46,7 @@ public class AbilityHandler {
             if (cooldowns[i] > 0) cooldowns[i]--;
         }
 
-        // Régénération stamina côté client
+        // Régénération stamina
         if (CombatModeHandler.isInCombatMode()) {
             CombatHud.stamina = Math.min(CombatHud.maxStamina, CombatHud.stamina + 0.5f);
         }
@@ -54,59 +54,43 @@ public class AbilityHandler {
         // Mouvement dash latéral côté client
         if (sideHopsActive && player.level().isClientSide) {
             sideHopsTicks--;
-            if (sideHopsTicks % SIDE_HOPS_INTERVAL == 0) {
+            if (sideHopsTicks >= 0 && sideHopsTicks % SIDE_HOPS_INTERVAL == 0) {
                 Vec3 look  = player.getLookAngle();
                 Vec3 right = new Vec3(-look.z, 0, look.x).normalize();
-                Vec3 dash  = right.scale(sideHopsDir * 1.8);
+                Vec3 dash  = right.scale(sideHopsDir * 2.0);
                 player.setDeltaMovement(dash.x, 0.3, dash.z);
                 sideHopsDir = -sideHopsDir;
             }
             if (sideHopsTicks <= 0) sideHopsActive = false;
         }
 
-        // Tick serveur si on est côté serveur
+        // Tick serveur
         if (!player.level().isClientSide) {
             ServerAbilityHandler.tick();
         }
-        // Bloque le changement de slot en mode combat
-        if (CombatModeHandler.isInCombatMode() && player.level().isClientSide) {
-            Minecraft mc = Minecraft.getInstance();
-            if (mc.player != null) {
-                mc.player.getInventory().selected = 0;
-            }
-        }
+
     }
 
-    /**
-     * Tente d'activer une capacité côté client.
-     * Vérifie stamina et cooldown localement, puis envoie un packet au serveur.
-     */
     public static boolean tryActivate(int slot, Player player) {
         if (slot < 0 || slot >= 5) return false;
         if (cooldowns[slot] > 0) return false;
         if (CombatHud.stamina < STAMINA_COST[slot]) return false;
 
-        // Débit local immédiat (affichage)
         CombatHud.stamina -= STAMINA_COST[slot];
         cooldowns[slot] = COOLDOWN_TICKS[slot];
 
-        // Dash latéral : mouvement démarré côté client
         if (slot == SLOT_SIDE_HOPS) {
             sideHopsActive = true;
             sideHopsTicks  = SIDE_HOPS_DURATION;
             sideHopsDir    = 1;
         }
 
-        // Envoie la vraie logique (dégâts, blocs) au serveur
         PacketHandler.CHANNEL.send(
                 PacketDistributor.SERVER.noArg(),
                 new UseAbilityPacket(slot)
         );
-
         return true;
     }
-
-    // ── Getters pour l'affichage ──────────────────────────────────────────────
 
     public static float getCooldownProgress(int slot) {
         if (slot < 0 || slot >= 5) return 0f;

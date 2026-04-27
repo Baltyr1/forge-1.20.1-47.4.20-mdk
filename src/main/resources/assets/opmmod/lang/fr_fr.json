@@ -1,7 +1,12 @@
 {
   "key.opmmod.class_screen": "Ouvrir le menu Classe",
-  "key.categories.opmmod": "OpmMod",
-  "key.opmmod.class_screen": "Ouvrir le menu Classe",
   "key.opmmod.combat_mode": "Mode Combat",
-  "key.categories.opmmod": "OpmMod"
+  "key.categories.opmmod": "OpmMod",
+  "key.opmmod.ability_1": "Capacité 1",
+  "key.opmmod.ability_2": "Capacité 2",
+  "key.opmmod.ability_3": "Capacité 3",
+  "key.opmmod.ability_4": "Capacité 4",
+  "key.opmmod.ability_5": "Capacité 5",
+  "key.opmmod.ability_6": "Capacité 6"
 }
+

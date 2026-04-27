@@ -1,6 +1,8 @@
 package net.baltyr.opmmod.client;
 
 import net.baltyr.opmmod.OpmMod;
+import net.baltyr.opmmod.classes.ModCapabilities;
+import net.baltyr.opmmod.classes.OpmClass;
 import net.baltyr.opmmod.client.abilities.AbilityHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -20,10 +22,6 @@ public class CombatHud {
 
     public static float stamina    = 100f;
     public static float maxStamina = 100f;
-
-    private static final String[] ABILITY_NAMES = {
-            "Poing", "Consec.", "Dash", "Table", "Sérieux", ""
-    };
 
     @SubscribeEvent
     public static void onRenderOverlay(RenderGuiOverlayEvent.Post event) {
@@ -80,7 +78,7 @@ public class CombatHud {
         gfx.drawCenteredString(mc.font, stLabel, stX + stW / 2, textY, 0xFFFFFFFF);
 
         // ── Slots ──────────────────────────────────────────────────────────
-        String[] keys = {"&", "é", "\"", "'", "(", "-"};
+        String[] keys = {"1", "2", "3", "4", "5", "6"};
         for (int i = 0; i < SLOTS; i++) {
             int sx = baseX + i * (SLOT_SIZE + SLOT_GAP);
             int sy = baseY;
@@ -105,8 +103,10 @@ public class CombatHud {
             }
 
             // Nom capacité
-            if (i < ABILITY_NAMES.length && !ABILITY_NAMES[i].isEmpty()) {
-                gfx.drawString(mc.font, ABILITY_NAMES[i], sx + 2, sy + 2,
+            // Nom capacité selon la classe
+            String[] classAbilityNames = getAbilityNames(mc);
+            if (i < classAbilityNames.length && !classAbilityNames[i].isEmpty()) {
+                gfx.drawString(mc.font, classAbilityNames[i], sx + 2, sy + 2,
                         onCD ? 0xFF886633 : 0xFF8888AA, false);
             }
 
@@ -134,5 +134,18 @@ public class CombatHud {
         gfx.fill(x,         y + h - 3, x + 1,     y + h,     color);
         gfx.fill(x + w - 3, y + h - 1, x + w,     y + h,     color);
         gfx.fill(x + w - 1, y + h - 3, x + w,     y + h,     color);
+    }
+    private static String[] getAbilityNames(Minecraft mc) {
+        if (mc.player == null) return new String[]{"", "", "", "", "", ""};
+
+        OpmClass cls = mc.player.getCapability(ModCapabilities.PLAYER_CLASS)
+                .map(cap -> cap.getPlayerClass())
+                .orElse(OpmClass.NONE);
+
+        return switch (cls) {
+            case SAITAMA -> new String[]{"Poing", "Consec.", "Dash", "Table", "Sérieux", ""};
+            // Autres classes à venir
+            default -> new String[]{"", "", "", "", "", ""};
+        };
     }
 }

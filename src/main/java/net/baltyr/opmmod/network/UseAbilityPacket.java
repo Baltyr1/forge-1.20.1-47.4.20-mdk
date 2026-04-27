@@ -1,5 +1,7 @@
 package net.baltyr.opmmod.network;
 
+import net.baltyr.opmmod.classes.ModCapabilities;
+import net.baltyr.opmmod.classes.OpmClass;
 import net.baltyr.opmmod.client.abilities.ServerAbilityHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,9 +28,15 @@ public class UseAbilityPacket {
     public static void handle(UseAbilityPacket packet, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ServerPlayer player = ctx.get().getSender();
-            if (player != null) {
-                ServerAbilityHandler.activate(packet.slot, player);
-            }
+            if (player == null) return;
+
+            // Vérifie la classe côté serveur
+            boolean isSaitama = player.getCapability(ModCapabilities.PLAYER_CLASS)
+                    .map(cap -> cap.getPlayerClass() == OpmClass.SAITAMA)
+                    .orElse(false);
+            if (!isSaitama) return;
+
+            ServerAbilityHandler.activate(packet.slot, player);
         });
         ctx.get().setPacketHandled(true);
     }

@@ -22,7 +22,49 @@ public class KeyBindings {
     public static final KeyMapping TOGGLE_COMBAT_MODE = new KeyMapping(
             "key.opmmod.combat_mode",
             InputConstants.Type.KEYSYM,
-            GLFW.GLFW_KEY_C,      // touche C par défaut, changeable dans les options
+            GLFW.GLFW_KEY_C,
+            "key.categories.opmmod"
+    );
+
+    public static final KeyMapping ABILITY_1 = new KeyMapping(
+            "key.opmmod.ability_1",
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_1,
+            "key.categories.opmmod"
+    );
+
+    public static final KeyMapping ABILITY_2 = new KeyMapping(
+            "key.opmmod.ability_2",
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_2,
+            "key.categories.opmmod"
+    );
+
+    public static final KeyMapping ABILITY_3 = new KeyMapping(
+            "key.opmmod.ability_3",
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_3,
+            "key.categories.opmmod"
+    );
+
+    public static final KeyMapping ABILITY_4 = new KeyMapping(
+            "key.opmmod.ability_4",
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_4,
+            "key.categories.opmmod"
+    );
+
+    public static final KeyMapping ABILITY_5 = new KeyMapping(
+            "key.opmmod.ability_5",
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_5,
+            "key.categories.opmmod"
+    );
+
+    public static final KeyMapping ABILITY_6 = new KeyMapping(
+            "key.opmmod.ability_6",
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_6,
             "key.categories.opmmod"
     );
 
@@ -30,5 +72,11 @@ public class KeyBindings {
     public static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
         event.register(OPEN_CLASS_SCREEN);
         event.register(TOGGLE_COMBAT_MODE);
+        event.register(ABILITY_1);
+        event.register(ABILITY_2);
+        event.register(ABILITY_3);
+        event.register(ABILITY_4);
+        event.register(ABILITY_5);
+        event.register(ABILITY_6);
     }
 }
